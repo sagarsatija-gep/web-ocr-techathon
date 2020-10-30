@@ -1,6 +1,6 @@
 {
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
-  "version": 1, 
+  "version": 1,
   "newProjectRoot": "projects",
   "projects": {
     "web-ocr-techathon": {
@@ -119,6 +119,10 @@
           }
         }
       }
-    }},
-  "defaultProject": "web-ocr-techathon"
+    }
+  },
+  "defaultProject": "web-ocr-techathon",
+  "cli": {
+    "analytics": "0485fb3d-1091-44d0-8a5d-5e6dd4ad1da0"
+  }
 }

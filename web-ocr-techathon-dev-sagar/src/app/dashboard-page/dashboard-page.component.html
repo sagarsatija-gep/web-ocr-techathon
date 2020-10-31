@@ -1,1 +1,79 @@
-<p>dashboard-page works!</p>
+<!-- <p>dashboard-page works!</p> -->
+
+<!-- <input 
+    style="display: none" 
+    type="file" 
+    multiple 
+    (change)="onFileChanged($event)" 
+    #fileInput
+/>
+<input 
+    type="button" 
+    class="upload-button" 
+    value="Upload attachment(s)" 
+    (click)="fileInput.click()" 
+/>
+<br> -->
+<!-- <mat-table #table [dataSource]="dataSource">
+
+    <ng-container matColumnDef="invoiceNo">
+      <mat-header-cell *matHeaderCellDef> InvoiceNo </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.invoiceNo}} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="userName">
+      <mat-header-cell *matHeaderCellDef> User Name </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.userName}} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="status">
+      <mat-header-cell *matHeaderCellDef> Status </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.status}} <mat-cell>
+    </ng-container>
+
+    
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let element; columns: displayedColumns;"></mat-row>
+  </mat-table> -->
+  <!-- <ag-grid-angular
+    style="width: 500px; height: 500px;"
+    class="ag-theme-alpine"
+    [rowData]="rowData"
+    [columnDefs]="columnDefs"
+>
+</ag-grid-angular> -->
+<mat-tab-group>
+    <mat-tab label="All"
+    style="width: 100%;"> Content 1 
+    <ag-grid-angular
+    style="width: 100%; height: 100%;"
+    class="ag-theme-alpine"
+    [rowData]="rowDataAll"
+    [columnDefs]="columnDefsAll"
+  >
+</ag-grid-angular>
+    </mat-tab>
+    <mat-tab label="UnProcessed"> Content 2 
+        <ag-grid-angular
+    style="width: 100%; height: 100%;"
+    class="ag-theme-alpine"
+    [rowData]="rowDataProcessed"
+    [columnDefs]="columnDefsProcessed"
+  >
+</ag-grid-angular>
+    </mat-tab>
+    <mat-tab label="Processed"> Content 3 
+        <ag-grid-angular
+    style="width: 100%; height: 100%;"
+    class="ag-theme-alpine"
+    [rowData]="rowDataProcessed"
+    [columnDefs]="columnDefsProcessed"
+  >
+</ag-grid-angular>
+    </mat-tab>
+  </mat-tab-group>
+  <br>
+  
+
+<router-outlet></router-outlet>

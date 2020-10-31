@@ -6,17 +6,26 @@ import { AppComponent } from './app.component';
 import { LoginPageComponent } from './login-page/login-page.component';
 import { DashboardPageComponent } from './dashboard-page/dashboard-page.component';
 import { DetailsOcrPageComponent } from './details-ocr-page/details-ocr-page.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatTabsModule } from '@angular/material/tabs';
+import { AgGridModule } from 'ag-grid-angular';
+//import { MaterialModule } from './material.module';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginPageComponent,
     DashboardPageComponent,
-    DetailsOcrPageComponent
+    DetailsOcrPageComponent,
+    
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    BrowserAnimationsModule,
+    MatTabsModule,
+    AgGridModule
+   // MaterialModule
   ],
   providers: [],
   bootstrap: [AppComponent]

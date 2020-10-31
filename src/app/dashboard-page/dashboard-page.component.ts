@@ -27,8 +27,7 @@ export class DashboardPageComponent implements OnInit{
   ngOnInit(): void {
     this.http.get('http://localhost:5000/api/ocr').subscribe(res=>{
       console.log(res);
-    });
-    
+    });  
   }
     
   

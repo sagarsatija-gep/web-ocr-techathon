@@ -22,6 +22,13 @@ export class DetailsOcrService {
     //   catchError(this.handleError)
     // )
   }  
+  getInvoice(id): Observable<any> {
+    return this.http.get(this.apiURL + `/api/invoice/search/${id}`);
+    // .pipe(
+    //   retry(1),
+    //   catchError(this.handleError)
+    // )
+  }  
   updateEmployee( employee): Observable<any> {
     return this.http.post(this.apiURL + '/api/invoice/edit', employee,this.httpOptions)
     .pipe(

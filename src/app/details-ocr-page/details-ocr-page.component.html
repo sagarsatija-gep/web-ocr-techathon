@@ -1,1 +1,24 @@
-<p>details-ocr-page works!</p>
+<div class="container-fluid bg-gray">
+    <div class="row">
+        <div class="Search Widget">
+            <label style="margin:15px 30px 20px 30px;font-size: 20px">Enter Invoice Number</label>
+            <input style="margin:10px" type="text" >
+            <button style="margin:10px" class="btn"> Save</button>
+        </div>
+        <div class="Image Widget" >
+            <section style="font-size:24px">SCANNED DOCUMENT</section>
+            <div id='mydiv' style="text-align:center">                
+                    <img src='https://templates.invoicehome.com/invoice-template-us-mono-black-750px.png' />
+            </div>
+        </div>
+        <div class="Table Widget">  
+            <section style="font-size:24px">DETAILS</section>
+                <ag-grid-angular style="width: 100%; height: 200px;"
+                class="ag-theme-alpine"
+                [rowData]="rowData"
+                [columnDefs]="columnDefs">
+            </ag-grid-angular>
+        </div>
+    </div>
+  </div>
+  

@@ -1,0 +1,138 @@
+.bg-gray {
+    background-color: #F3F3F3;
+  }
+  
+  .signinImage {
+    width: 100%;
+    -o-object-fit: contain;
+       object-fit: contain;
+    height: 100%;
+  }
+  
+  .btn-signin {
+    width: 182px;
+    height: 58px;
+    background-color: #000000;
+    background: #000000 0% 0% no-repeat padding-box;
+    -webkit-box-shadow: 0px 1px 1px #161D251A;
+            box-shadow: 0px 1px 1px #161D251A;
+    border-radius: 4px;
+    opacity: 1;
+    margin-left: 50%;
+    -webkit-transform: translateX(-50%);
+            transform: translateX(-50%);
+    color: #FFFFFF;
+    font-size: 16px;
+    font-family: 'Roboto Medium';
+  }
+  
+  .form-group {
+    position: relative;
+    margin-bottom: 2rem;
+  }
+  
+  .form-control-placeholder {
+    position: absolute;
+    top: 0;
+    padding: 17px 0 0 7px;
+    -webkit-transition: all 200ms;
+    transition: all 200ms;
+    opacity: 0.5;
+    color: #808080 !important;
+    text-transform: uppercase;
+    font-size: 11px;
+  }
+  
+  .form-control:focus + .form-control-placeholder,
+  .form-control:valid + .form-control-placeholder {
+    font-size: 11px;
+    -webkit-transform: translate3d(0, -30%, 0);
+            transform: translate3d(0, -30%, 0);
+    opacity: 1;
+  }
+  
+  .signInForm {
+    width: 600px;
+    margin-left: 25px;
+  }
+  
+  .signInForm .form-control {
+    width: 100%;
+    /* height: 58px; */
+    background: #FFFFFF 0% 0% no-repeat padding-box;
+    border: 1px solid #CFD8DC;
+    border-radius: 4px;
+    opacity: 1;
+    color: #454545;
+    font-size: 16px;
+    font-family: 'Roboto Medium';
+    padding: 20px 0px 0px 5px;
+  }
+  
+  .signInForm .footerImage {
+    margin-top: 120px;
+  }
+  
+  .signInForm .footerImage .nexxe {
+    text-transform: uppercase;
+    text-align: center;
+    font-family: 'Arial Black';
+    letter-spacing: -2.39px;
+    color: #2546AC;
+    opacity: 1;
+    font-size: 38px;
+  }
+  
+  .signInForm .footerImage .poweredBy {
+    color: #3E3F42;
+    font-size: 18px;
+    font-family: 'Roboto Regular';
+  }
+  
+  .signInForm .footerImage .gepLogo {
+    width: 80px;
+    height: 20px;
+  }
+/*   
+  .signInHeader {
+    margin: 9vw 0vw 0vw 10vw;
+  } */
+  
+  .signInHeader .signinTitle {
+    font-size: 32px;
+    font-family: 'Roboto Medium';
+    margin-left: 25px;
+
+  }
+  
+  .signInHeader .signinSubtitle {
+    font-size: 18px;
+    font-family: 'Roboto Regular';
+    margin-left: 25px;
+
+  }
+  
+  .nexxeIcon {
+    width: 10vw;
+    position: absolute;
+    bottom: 10%;
+    left: 48%;
+    -webkit-transform: translateX(-50%);
+            transform: translateX(-50%);
+  }
+  
+  @media screen and (max-width: 767px) {
+    .signinimg {
+      background-size: 120% 100%;
+    }
+    .signInForm {
+      padding: 0vw 10vw;
+    }
+    .nexxeIcon {
+      bottom: 5%;
+      width: 12vw;
+      left: 50%;
+    }
+  }
+  
+  /*# sourceMappingURL=signin.component.css.map */

@@ -1,6 +1,10 @@
 .bg-gray {
     background-color: #F3F3F3;
   }
+  .center {
+      display: flex;
+      justify-content: center
+  }
   
   .signinImage {
     width: 100%;
@@ -12,8 +16,8 @@
   .btn-signin {
     width: 182px;
     height: 58px;
-    background-color: #000000;
-    background: #000000 0% 0% no-repeat padding-box;
+    background-color: #32588D;
+    background: #32588D 0% 0% no-repeat padding-box;
     -webkit-box-shadow: 0px 1px 1px #161D251A;
             box-shadow: 0px 1px 1px #161D251A;
     border-radius: 4px;
@@ -102,6 +106,7 @@
     font-size: 32px;
     font-family: 'Roboto Medium';
     margin-left: 25px;
+    margin-bottom: 20px
 
   }
   

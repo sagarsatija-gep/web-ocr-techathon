@@ -51,17 +51,17 @@
                     <h4>Upload Section</h4>
                     <div id="fileSelector" >
                         <input type="file" name="fileUplaod" id="fileUpload"
-                        multiple ng2FileSelect [uploader]="uploader">
+                        multiple ng2FileSelect [uploader]="uploader" accept="image/jpeg, image/png, application/pdf">
                     </div>
                     <div>
-                        <div class="row uploadList" *ngFor="let item of uploader.queue">
-                            <div class="col-sm-4">{{item.file.name}}</div>
-                            <div class="col-sm-4">
+                        <div class="row uploadList" *ngFor="let item of uploader.queue" style="display: flex;">
+                            <div class="col-sm-4" >{{item.file.name}}</div>
+                            <!-- <div class="col-sm-4">
                                 <div class="progress">
                                     <div class="progress-bar bg-success" 
                                     [ngStyle]="{'width':item.progress+'%'}"></div>
                                 </div>
-                            </div>
+                            </div> -->
                             <div class="col-sm-4">
                                     <button type="button" class="btn " (click)="item.upload()">Upload</button>
                                     <button type="button" class="btn " (click)="item.remove()">Cancel</button>
@@ -81,32 +81,33 @@
     <button (click)="fileInput.click()" style="flex-direction: row;">Select File</button>
     <button (click)="onUpload()">Upload!</button> -->
     
-    <br>
+    
     <br>
     <br>
     <mat-tab-group>
         <mat-tab label="All"
-        style="width: 100%;"> Content 1 
+        style="width: 100%;"> 
         <ag-grid-angular 
         style="width: 100%; height: 200px;"
         class="ag-theme-alpine"
         [rowData]="rowDataAll"
         [columnDefs]="columnDefsAll"
+        (rowClicked)='onRowClicked($event)'
       >
     </ag-grid-angular>
         </mat-tab>
-        <mat-tab label="UnProcessed"> Content 2 
+        <mat-tab label="UnProcessed">  
             <ag-grid-angular
-        style="width: 100%; height: 100%;"
+        style="width: 100%; height: 200px;"
         class="ag-theme-alpine"
         [rowData]="rowDataProcessed"
         [columnDefs]="columnDefsProcessed"
       >
     </ag-grid-angular>
         </mat-tab>
-        <mat-tab label="Processed"> Content 3 
+        <mat-tab label="Processed">  
             <ag-grid-angular
-        style="width: 100%; height: 100%;"
+        style="width: 100%; height: 200px;"
         class="ag-theme-alpine"
         [rowData]="rowDataProcessed"
         [columnDefs]="columnDefsProcessed"

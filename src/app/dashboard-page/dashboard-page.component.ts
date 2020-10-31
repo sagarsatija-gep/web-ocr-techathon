@@ -1,11 +1,8 @@
+import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import {MatTableModule} from '@angular/material/table';
-import { MatTable } from '@angular/material/table';
-import { MatTableDataSource } from '@angular/material/table';
-// import "../node_modules/ag-grid-community/dist/styles/ag-grid.css";
-// import "../node_modules/ag-grid-community/dist/styles/ag-theme-alpine-dark.css";
-// import "../node_modules/ag-grid-community/dist/styles/ag-theme-alpine.css";
+import { Router } from '@angular/router';
 import { FileSelectDirective, FileUploader} from 'ng2-file-upload';
+import { DashboardPageService } from './dashboard-page.service';
 
 const uri = 'http://localhost:4200/file/upload';
 @Component({
@@ -14,34 +11,51 @@ const uri = 'http://localhost:4200/file/upload';
   styleUrls: ['./dashboard-page.component.css']
 })
 
-export class DashboardPageComponent {
+export class DashboardPageComponent implements OnInit{
   uploader:FileUploader = new FileUploader({url:uri});
 
     attachmentList:any = [];
 
-    constructor(){
+    constructor(private route: Router,
+      private _dashboardService:DashboardPageService,
+      private http : HttpClient){
 
         this.uploader.onCompleteItem = (item:any, response:any , status:any, headers:any) => {
             this.attachmentList.push(JSON.parse(response));
         }
     }
+  ngOnInit(): void {
+    let data=this.http.get('http://localhost:5000/api/ocr');
+    console.log(data);
+  }
+    
   
-  selectedFile: File
+  // selectedFile: File
 
-  onFileChanged(event) {
-    this.selectedFile = event.target.files[0]
-  }
+  // onFileChanged(event) {
+  //   this.selectedFile = event.target.files[0]
+  // }
 
-  onUpload() {
-    // upload code goes here
-  }
+  // onUpload() {
+  //   // upload code goes here
+  // }
+  onRowClicked(event: any) 
+  { 
+    let id=event.data.invoiceNo;
+    this.route.navigate([`/details-ocr/${id}`])
+    console.log(id);
+    console.log('row', event); 
+   }
 
   columnDefsAll = [
     { headerName:'invoiceNo',
-      field: 'invoiceNo' },
-
-    { field: 'userName' },
-    { field: 'status'}
+      field: 'invoiceNo' ,
+      rowSelection:'single'
+  },
+    { headerName:'userName',
+      field: 'userName' },
+    { headerName:'status',
+      field: 'status'}
 ];
 
 rowDataAll = [

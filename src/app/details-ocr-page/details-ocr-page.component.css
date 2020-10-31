@@ -30,6 +30,8 @@
     font-size: 26px;
     font-family: 'Roboto Regular';
     color: #3E3F42;
+    margin: 20px;
+    padding: 10px;
 }
 .btn{
     background-color: #32588D;

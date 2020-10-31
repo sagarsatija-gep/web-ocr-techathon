@@ -158,6 +158,9 @@ columnDefsUnProcessed = [
        }}
   
 ];
+onSelectionChanged(event){
+  console.log(event)
+}
 
 rowDataUnProcessed :any;
 }

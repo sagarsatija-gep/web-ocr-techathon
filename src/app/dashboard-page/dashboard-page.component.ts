@@ -88,6 +88,9 @@ columnDefsUnProcessed = [
   { field: 'invoiceTotal' },
   
 ];
+onSelectionChanged(event){
+  console.log(event)
+}
 
 rowDataUnProcessed = [
   { invoiceNo:1 , userName: 'Celica', status: 'processed' },
@@ -95,6 +98,7 @@ rowDataUnProcessed = [
   { invoiceNo: 3, userName: 'Boxter', status: 'processed' }
 ];
 }
+
 
 // displayedColumns = ['position', 'firstName', 'lastName', 'email'];
 //   // dataSource = new MatTableDataSource(ELEMENT_DATA);

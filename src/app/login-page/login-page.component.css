@@ -1,17 +1,20 @@
 .bg-gray {
     background-color: #F3F3F3;
   }
+  .Main{
+    width: 800px;
+    height: 350px;
+    align-content: center;
+    display: flex;
+    justify-content: center;
+    margin-left: 300px;
+    margin-top: 50px;
+}
   .center {
       display: flex;
       justify-content: center
   }
   
-  .signinImage {
-    width: 100%;
-    -o-object-fit: contain;
-       object-fit: contain;
-    height: 100%;
-  }
   
   .btn-signin {
     width: 182px;

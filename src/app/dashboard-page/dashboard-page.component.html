@@ -86,27 +86,28 @@
     <br>
     <mat-tab-group>
         <mat-tab label="All"
-        style="width: 100%;"> Content 1 
+        style="width: 100%;"> 
         <ag-grid-angular 
         style="width: 100%; height: 200px;"
         class="ag-theme-alpine"
         [rowData]="rowDataAll"
         [columnDefs]="columnDefsAll"
+        (rowClicked)='onRowClicked($event)'
       >
     </ag-grid-angular>
         </mat-tab>
-        <mat-tab label="UnProcessed"> Content 2 
+        <mat-tab label="UnProcessed">  
             <ag-grid-angular
-        style="width: 100%; height: 100%;"
+        style="width: 100%; height: 200px;"
         class="ag-theme-alpine"
         [rowData]="rowDataProcessed"
         [columnDefs]="columnDefsProcessed"
       >
     </ag-grid-angular>
         </mat-tab>
-        <mat-tab label="Processed"> Content 3 
+        <mat-tab label="Processed">  
             <ag-grid-angular
-        style="width: 100%; height: 100%;"
+        style="width: 100%; height: 200px;"
         class="ag-theme-alpine"
         [rowData]="rowDataProcessed"
         [columnDefs]="columnDefsProcessed"

@@ -26,11 +26,31 @@ export class DashboardPageComponent implements OnInit{
     }
   ngOnInit(): void {
     this.http.get('http://localhost:5000/api/ocr').subscribe(res=>{
+      this.rowDataAll=res;
       console.log(res);
     });
     
   }
-    
+//   fileChange(event) {
+//     let fileList: FileList = event.target.files;
+//     if(fileList.length > 0) {
+//         let file: File = fileList[0];
+//         let formData:FormData = new FormData();
+//         formData.append('uploadFile', file, file.name);
+//         // let headers = new Headers();
+//         // /** In Angular 5, including the header Content-Type can invalidate your request */
+//         // headers.append('Content-Type', 'multipart/form-data');
+//         // headers.append('Accept', 'application/json');
+//         // let options = new RequestOptions({ headers: headers });
+//         this.http.post(`${this.apiEndPoint}`, formData, options)
+//             .map(res => res.json())
+//             .catch(error => Observable.throw(error))
+//             .subscribe(
+//                 data => console.log('success'),
+//                 error => console.log(error)
+//             )
+//     }
+// }
   
   // selectedFile: File
 
@@ -43,28 +63,29 @@ export class DashboardPageComponent implements OnInit{
   // }
   onRowClicked(event: any) 
   { 
-    let id=event.data.invoiceNo;
+    let id=event.data.invoiceDocumentId;
     this.route.navigate([`/details-ocr/${id}`])
     console.log(id);
     console.log('row', event); 
    }
 
   columnDefsAll = [
-    { headerName:'invoiceNo',
-      field: 'invoiceNo' ,
+    { headerName:'FileName',
+      field: 'fileName' ,
       rowSelection:'single'
   },
-    { headerName:'userName',
-      field: 'userName' },
-    { headerName:'status',
-      field: 'status'}
+ 
+    { headerName:'UploadedBy',
+      field: 'uploadedBy' },
+    { headerName:'UploadedDate',
+      field: 'uploadedDate'}//invoiceDocumentId
 ];
-
-rowDataAll = [
-    { invoiceNo:1 , userName: 'Celica', status: 'processed' },
-    { invoiceNo: 2, userName: 'Mondeo', status: 'unprocessed' },
-    { invoiceNo: 3, userName: 'Boxter', status: 'processed' }
-];
+rowDataAll:any;
+// rowDataAll = [
+//     { invoiceNo:1 , userName: 'Celica', status: 'processed' },
+//     { invoiceNo: 2, userName: 'Mondeo', status: 'unprocessed' },
+//     { invoiceNo: 3, userName: 'Boxter', status: 'processed' }
+// ];
 //Invoicedate CustomerNo  CustomerName  Customer Address  ShipTo  ShipVia InvoiceSubTotal InvoiceTAX  INvoiceDiscount InvoiceTotal
 columnDefsProcessed = [
   { field: 'invoiceNo' },

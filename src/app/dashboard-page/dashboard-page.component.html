@@ -62,7 +62,7 @@
                                     [ngStyle]="{'width':item.progress+'%'}"></div>
                                 </div>
                             </div> -->
-                            <div class="col-sm-4">
+                            <div class="col-sm-4" style="text-align:right;">
                                     <button type="button" class="btn " (click)="item.upload()">Upload</button>
                                     <button type="button" class="btn " (click)="item.remove()">Cancel</button>
                             </div>
@@ -84,11 +84,12 @@
     
     <br>
     <br>
+    <div class="dashboard-tabs card" >
     <mat-tab-group>
         <mat-tab label="All"
         style="width: 100%;"> 
         <ag-grid-angular 
-        style="width: 100%; height: 200px;"
+        style="width: 100%;height: 400px;"
         class="ag-theme-alpine"
         [rowData]="rowDataAll"
         [columnDefs]="columnDefsAll"
@@ -114,7 +115,19 @@
       >
     </ag-grid-angular>
         </mat-tab>
+        <mat-tab label="Finalized"
+        style="width: 100%;"> 
+        <ag-grid-angular 
+        style="width: 100%; height: 200px;"
+        class="ag-theme-alpine"
+        [rowData]="rowDataAll"
+        [columnDefs]="columnDefsAll"
+        (rowClicked)='onRowClicked($event)'
+      >
+    </ag-grid-angular>
+        </mat-tab>
       </mat-tab-group>
+    </div>
       <br>
       
     

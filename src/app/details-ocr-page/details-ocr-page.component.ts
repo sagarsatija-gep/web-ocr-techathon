@@ -10,7 +10,8 @@ import { DetailsOcrService } from './details-ocr.service';
 })
 export class DetailsOcrPageComponent implements OnInit,AfterViewInit {
   url;
-  InvoiceId;
+  imageUrl;
+  InvoiceId:'100';
   gridColumnApi;
   private gridApi;
   subTotal;
@@ -31,6 +32,7 @@ ngAfterViewInit() {
       this.subTotal=res[0]['invoiceSubTotal'];
       this.Tax=res[0]['invoiceTax']
       this.Total=res[0]['invoiceTotal']
+      this.imageUrl='http://localhost:5000/uploads'+res[0]['fileUrl']
       console.log(res)
     });  
 }
@@ -54,8 +56,7 @@ ngAfterViewInit() {
     this.gridColumnApi = params.columnApi;
   }
   rowData;
-  columnDefs = [
-    
+  columnDefs = [  
     { 
       headerName: 'Line Number',
       checkboxSelection:true,
@@ -100,13 +101,14 @@ onSubmit(){
 }
 onNewInvoiceNumber(InvoiceId){
   this.apiservice.getInvoice(InvoiceId).subscribe(res=>{
-    this.data=res;
-    this.rowData=res[0]['lineDetail']
-    this.val=res[0]['invoiceNo']
-    this.subTotal=res[0]['invoiceSubTotal'];
-    this.Tax=res[0]['invoiceTax']
-    this.Total=res[0]['invoiceTotal']
-    console.log(res)
+    // this.data=res;
+    // this.rowData=res[0]['lineDetail']
+    // this.val=res[0]['invoiceNo']
+    // this.subTotal=res[0]['invoiceSubTotal'];
+    // this.Tax=res[0]['invoiceTax']
+    // this.Total=res[0]['invoiceTotal']
+    console.log(res[0]['_id'])
+    this.route.navigate([`/details-ocr/${res[0]['_id']}`])
   });     
 
 }

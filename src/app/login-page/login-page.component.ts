@@ -20,7 +20,6 @@ export class LoginPageComponent implements OnInit {
   });
   }
   onSubmit() {
-    debugger;
     this.userId=this.authForm.value.email;
     this.service.setUserType(this.userId);
     console.log(this.userId,this.service.getUserType())

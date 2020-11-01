@@ -63,9 +63,8 @@ export class DashboardPageComponent implements OnInit{
    this.userId=this.service.getUserType()
    console.log(this.userId)
     this.uploader.onAfterAddingFile = (file) => { file.withCredentials = false; };
-    debugger;
+
     this.uploader.onCompleteItem = (item: any, response: any, status: any, headers: any) => {
-      debugger;
       console.log(headers)
          console.log('FileUpload:uploaded successfully:', item, status, response,headers);
         // alert('Your file has been uploaded successfully');

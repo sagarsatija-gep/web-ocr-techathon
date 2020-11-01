@@ -11,7 +11,7 @@ import { of } from 'rxjs';
 import { catchError } from 'rxjs/operators'; 
 import { RestApiService } from '../shared/rest-api.service';
 
-const uri = 'http://localhost:5000/api/upload';
+const uri = 'http://localhost:5000/api/upload-documents';
 @Component({
   selector: 'app-dashboard-page',
   templateUrl: './dashboard-page.component.html',

@@ -1,3 +1,4 @@
+
 <!-- <p>dashboard-page works!</p> -->
 
 <!-- <input 
@@ -50,26 +51,27 @@
                 <div class="col-sm-12">
                     <h4>Upload Section</h4>
                     <div id="fileSelector" >
-                        <input type="file" name="fileUplaod" id="fileUpload"
+                        <input type="file" name="fileUplaod" id="fileUpload" 
                         multiple ng2FileSelect [uploader]="uploader" accept="image/jpeg, image/png, application/pdf">
                     </div>
                     <div>
                         <div class="row uploadList" *ngFor="let item of uploader.queue" style="display: flex;">
-                            <div class="col-sm-4" >{{item.file.name}}</div>
+                            <div style="padding-right: 10px;" class="col-sm-4">{{item.file.name}}</div>
                             <!-- <div class="col-sm-4">
                                 <div class="progress">
                                     <div class="progress-bar bg-success" 
                                     [ngStyle]="{'width':item.progress+'%'}"></div>
                                 </div>
                             </div> -->
-                            <div class="col-sm-4" style="text-align:right;">
-                                    <button type="button" class="btn " (click)="item.upload()">Upload</button>
-                                    <button type="button" class="btn " (click)="item.remove()">Cancel</button>
+                            <div class="col-sm-4" >
+                                    <!-- <button type="button" class="btn " (click)="item.upload()">Upload</button> -->
+                                    <button type="button" style="width: 20px;" class="btn " (click)="item.remove()">x</button>
                             </div>
                         </div>                        
                     </div>
                     <div class="row" *ngIf="uploader?.queue?.length > 0">
-                            <button type="button" class="btn " (click)="uploader.uploadAll()">Upload All</button>
+                            <button type="button" class="btn " (click)="uploader.uploadAll()" [disabled]="!uploader.getNotUploadedItems().length">Upload </button>
+                            
                     </div>
                 </div>                
             </div>
@@ -84,7 +86,11 @@
     
     <br>
     <br>
+    <div>
+    <section style="font-size:24px;padding-left: 20px ;">MANAGE OCR</section>
     <div class="dashboard-tabs card" >
+      <div>
+      
     <mat-tab-group>
         <mat-tab label="All"
         style="width: 100%;"> 
@@ -99,16 +105,16 @@
         </mat-tab>
         <mat-tab label="UnProcessed">  
             <ag-grid-angular
-        style="width: 100%; height: 200px;"
+        style="width: 100%; height: 400px;"
         class="ag-theme-alpine"
-        [rowData]="rowDataProcessed"
-        [columnDefs]="columnDefsProcessed"
+        [rowData]="rowDataUnProcessed"
+        [columnDefs]="columnDefsUnProcessed"
       >
     </ag-grid-angular>
         </mat-tab>
         <mat-tab label="Processed">  
             <ag-grid-angular
-        style="width: 100%; height: 200px;"
+        style="width: 100%; height: 400px;"
         class="ag-theme-alpine"
         [rowData]="rowDataProcessed"
         [columnDefs]="columnDefsProcessed"
@@ -118,16 +124,28 @@
         <mat-tab label="Finalized"
         style="width: 100%;"> 
         <ag-grid-angular 
-        style="width: 100%; height: 200px;"
+        style="width: 100%; height: 400px;"
         class="ag-theme-alpine"
-        [rowData]="rowDataAll"
-        [columnDefs]="columnDefsAll"
+        [rowData]="rowDataFinal"
+        [columnDefs]="columnDefsFinal"
+        (rowClicked)='onRowClicked($event)'
+      >
+    </ag-grid-angular>
+        </mat-tab>
+        <mat-tab label="InProgress"
+        style="width: 100%;"> 
+        <ag-grid-angular 
+        style="width: 100%; height: 400px;"
+        class="ag-theme-alpine"
+        [rowData]="rowDataInprogress"
+        [columnDefs]="columnDefsInprogress"
         (rowClicked)='onRowClicked($event)'
       >
     </ag-grid-angular>
         </mat-tab>
       </mat-tab-group>
     </div>
+  </div>
       <br>
       
     

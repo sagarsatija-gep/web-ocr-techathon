@@ -13,6 +13,8 @@ import { MatTabsModule } from '@angular/material/tabs';
 //import { AgGridModule } from 'ag-grid-angular';
 import {FileUploadModule} from 'ng2-file-upload';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -28,7 +30,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     MatTabsModule,
     FileUploadModule,
     BrowserAnimationsModule,
-    HttpClientModule
+    HttpClientModule,
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

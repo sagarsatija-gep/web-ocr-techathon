@@ -68,10 +68,10 @@ export class DashboardPageComponent implements OnInit{
       }}
       //console.log(this.rowDataAll)
       // for(let i=11;i<res.length;i++){
-      //   if(res[i].documenDetail.invoiceNo!=''){
-      //     this.rowDataAll[i].documenDetail.invoiceNo=res[i].documenDetail.invoiceNo;
+      //   if(res[i].documentDetail.invoiceNo!=''){
+      //     this.rowDataAll[i].documentDetail.invoiceNo=res[i].documentDetail.invoiceNo;
       //   }}
-      //console.log(res);
+      console.log(res);
       
     });
     this._dashboardService.getOcrProcessed(4).subscribe(res=>{
@@ -170,7 +170,7 @@ export class DashboardPageComponent implements OnInit{
       
   },
   { headerName:'InvoiceNo',
-      field: 'documenDetail.invoiceNo',
+      field: 'documentDetail.invoiceNo',
     width:300 },
  
     { headerName:'UploadedBy',
@@ -197,7 +197,7 @@ columnDefsInprogress = [
               `<a href="/details-ocr/${invNum.data.invoiceDocumentId}" >${invNum.value}</a>` 
 },
 { headerName:'InvoiceNo',
-      field: 'documenDetail.invoiceNo',
+      field: 'documentDetail.invoiceNo',
     width:300 },
   { headerName:'UploadedBy',
     field: 'uploadedBy',
@@ -222,7 +222,7 @@ columnDefsFinal = [
               `<a href="/details-ocr/${invNum.data.invoiceDocumentId}" >${invNum.value}</a>` 
 },
 { headerName:'InvoiceNo',
-      field: 'documenDetail.invoiceNo',
+      field: 'documentDetail.invoiceNo',
     width:300 },
   { headerName:'UploadedBy',
     field: 'uploadedBy' ,
@@ -247,7 +247,7 @@ columnDefsProcessed = [
               `<a href="/details-ocr/${invNum.data.invoiceDocumentId}" >${invNum.value}</a>` 
 },
 { headerName:'InvoiceNo',
-      field: 'documenDetail.invoiceNo',
+      field: 'documentDetail.invoiceNo',
     width:300 },
 { headerName:'UploadedBy',
   field: 'uploadedBy' ,
@@ -273,7 +273,7 @@ columnDefsUnProcessed = [
               `<a href="/details-ocr/${invNum.data.invoiceDocumentId}" >${invNum.value}</a>` 
   },
   { headerName:'InvoiceNo',
-  field: 'documenDetail.invoiceNo',
+  field: 'documentDetail.invoiceNo',
 width:300 },
     { headerName:'UploadedBy',
       field: 'uploadedBy' ,

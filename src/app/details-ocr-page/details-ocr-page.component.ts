@@ -32,7 +32,7 @@ ngAfterViewInit() {
       this.subTotal=res[0]['invoiceSubTotal'];
       this.Tax=res[0]['invoiceTax']
       this.Total=res[0]['invoiceTotal']
-      this.imageUrl='http://localhost:5000/uploads'+res[0]['fileUrl']
+      this.imageUrl='http://localhost:5000/'+res[0]['fileUrl']
       console.log(res)
     });  
 }
@@ -95,6 +95,12 @@ onSubmit(){
  // console.log(JSON.stringify(selectedData));
   this.data[0]['lineDetail']=selectedData
   console.log(JSON.stringify(this.data[0]))
+  let id=this.data[0]['ocrDocumentId']
+  let updateValue={'ocrDocumentId':id,
+'statusId':5}
+  this.apiservice.updateStatus(updateValue).subscribe(((data: {}) => {
+    console.log("status updated")
+  }))
   this.apiservice.updateEmployee(JSON.stringify(this.data[0])).subscribe((data: {}) => {
     this.route.navigate(['/dashboard'])
   })

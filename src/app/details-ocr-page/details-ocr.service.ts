@@ -36,6 +36,13 @@ export class DetailsOcrService {
       catchError(this.handleError)
     )
   }
+  updateStatus(dt): Observable<any> {
+    return this.http.post(this.apiURL + '/api/ocr/update-status', dt,this.httpOptions)
+    .pipe(
+      retry(1),
+      catchError(this.handleError)
+    )
+  }
   handleError(error) {
     let errorMessage = '';
     if(error.error instanceof ErrorEvent) {

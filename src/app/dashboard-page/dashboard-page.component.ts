@@ -16,25 +16,47 @@ const uri = 'http://localhost:5000/api/upload-documents';
 })
 
 export class DashboardPageComponent implements OnInit{
-  uploader:FileUploader = new FileUploader({url:uri});
+  public uploader:FileUploader = new FileUploader({url:uri,
+    headers: [{
+      name:'Content-Type',
+      value: 'multipart/form-data'
+    }],
+    itemAlias: 'file'});
 
     attachmentList:any = [];
-
+   //file;
     
     constructor(private route: Router,
       private _dashboardService:DashboardPageService,
       private http : HttpClient){
 
-        this.uploader.onCompleteItem = (item:any, response:any , status:any, headers:any) => {
-            //this.attachmentList.push(JSON.parse(response));
-            console.log(JSON.parse(response));
-        }
+        // this.uploader.onCompleteItem = (item:any, response:any , status:any, headers:any) => {
+        //     //this.attachmentList.push(JSON.parse(response));
+        //     console.log(JSON.parse(response));
+        // }
+        
     }
+    //multipart/form-data
+
+//     public uploader: FileUploader = new FileUploader({ url: uploadAPI, itemAlias: 'file' });
+//   ngOnInit() {
+//     this.uploader.onAfterAddingFile = (file) => { file.withCredentials = false; };
+//     this.uploader.onCompleteItem = (item: any, response: any, status: any, headers: any) => {
+//          console.log('FileUpload:uploaded successfully:', item, status, response);
+//          alert('Your file has been uploaded successfully');
+//     };
+//  }
   ngOnInit(): void {
     // this.http.get(`http://localhost:5000/api/ocr`).subscribe(res=>{
     //   this.rowDataAll=res;
     //   console.log(res);
     // });
+    this.uploader.uploadAll();
+        this.uploader.onAfterAddingFile = (file) => { file.formData =file._file; };
+    this.uploader.onCompleteItem = (item: any, response: any, status: any, headers: any) => {
+         console.log('FileUpload:uploaded successfully:', item, status, response);
+         //alert('Your file has been uploaded successfully');
+    };
     this._dashboardService.getOcrAll().subscribe(res=>{
       this.rowDataAll=res;
       console.log(res);

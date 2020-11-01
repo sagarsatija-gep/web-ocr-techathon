@@ -1,3 +1,4 @@
+
 <!-- <p>dashboard-page works!</p> -->
 
 <!-- <input 
@@ -69,7 +70,7 @@
                         </div>                        
                     </div>
                     <div class="row" *ngIf="uploader?.queue?.length > 0">
-                            <button type="button" class="btn " (click)="uploader.uploadAll()">Upload </button>
+                            <button type="button" class="btn " (click)="uploader.uploadAll()" [disabled]="!uploader.getNotUploadedItems().length">Upload </button>
                             
                     </div>
                 </div>                

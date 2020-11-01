@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
@@ -7,7 +7,21 @@ import { Observable } from 'rxjs';
 })
 export class DashboardPageService {
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) { 
+  }
+  httpOptions = {
+    headers: new HttpHeaders({
+      'Content-Type': 'multipart/form-data'
+    })
+  }  
+  uploadFile( ): Observable<any> {
+    return this.http.post('http://localhost:5000/api/upload-documents',this.httpOptions)
+    // .pipe(
+    //   retry(1),
+    //   catchError(this.handleError)
+    // )
+  }
+
   public getOcrProcessed(statudId:number): Observable<any> {
     
      return this.http.get(`http://localhost:5000/api/ocr/${statudId}`);

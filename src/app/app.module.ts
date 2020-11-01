@@ -20,7 +20,7 @@ import {FileUploadModule} from 'ng2-file-upload';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CommonModule } from '@angular/common';
 
-
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 @NgModule({
   declarations: [
     AppComponent,
@@ -42,7 +42,8 @@ import { CommonModule } from '@angular/common';
     MatIconModule,  
     MatButtonModule,  
     MatCardModule,  
-    MatProgressBarModule
+    MatProgressBarModule,
+    NgbModule
   ],
   providers: [],
   bootstrap: [AppComponent]

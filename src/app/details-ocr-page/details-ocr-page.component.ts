@@ -1,6 +1,9 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { DetailsOcrService } from './details-ocr.service';
+import {  Input } from '@angular/core';
+import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+
 //import { HttpClient } from '@angular/common/http';
 
 @Component({
@@ -18,8 +21,9 @@ export class DetailsOcrPageComponent implements OnInit,AfterViewInit {
   Total;
   Tax;
   val="";
-  constructor(private route: Router,private apiservice:DetailsOcrService) { }
-data;
+  data;
+  constructor(private route: Router,private apiservice:DetailsOcrService,private modalService: NgbModal) { }
+
 ngAfterViewInit() {
   // ...
   this.url=this.route.url;
@@ -98,12 +102,17 @@ onSubmit(){
   let id=this.data[0]['ocrDocumentId']
   let updateValue={'ocrDocumentId':id,
 'statusId':5}
+this.open();
   this.apiservice.updateStatus(updateValue).subscribe(((data: {}) => {
     console.log("status updated")
   }))
   this.apiservice.updateEmployee(JSON.stringify(this.data[0])).subscribe((data: {}) => {
-    this.route.navigate(['/dashboard'])
+   // this.route.navigate(['/dashboard'])
   })
+}
+open() {
+  const modalRef = this.modalService.open(NgbdModalContent);
+  modalRef.componentInstance.name = 'World';
 }
 onNewInvoiceNumber(InvoiceId){
   this.apiservice.getInvoice(InvoiceId).subscribe(res=>{
@@ -134,3 +143,29 @@ redirectTo(uri:string){
 // ];
 
 }
+@Component({
+  selector: 'ngbd-modal-content',
+  template: `
+    <div class="modal-header" style= "display:flex;
+    position: fixed;
+    left: 400px;
+    top: 200px;" >
+      <h4 class="modal-title">Hi there!</h4>
+      <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <p>Hello, {{name}}!</p>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-dark" (click)="activeModal.close('Close click')">Close</button>
+    </div>
+  `
+})
+export class NgbdModalContent {
+  @Input() name;
+
+  constructor(public activeModal: NgbActiveModal) {}
+}
+

@@ -1,51 +1,5 @@
-
-<!-- <p>dashboard-page works!</p> -->
-
-<!-- <input 
-    style="display: none" 
-    type="file" 
-    multiple 
-    (change)="onFileChanged($event)" 
-    #fileInput
-/>
-<input 
-    type="button" 
-    class="upload-button" 
-    value="Upload attachment(s)" 
-    (click)="fileInput.click()" 
-/>
-<br> -->
-<!-- <mat-table #table [dataSource]="dataSource">
-
-    <ng-container matColumnDef="invoiceNo">
-      <mat-header-cell *matHeaderCellDef> InvoiceNo </mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.invoiceNo}} </mat-cell>
-    </ng-container>
-
-    <ng-container matColumnDef="userName">
-      <mat-header-cell *matHeaderCellDef> User Name </mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.userName}} </mat-cell>
-    </ng-container>
-
-    <ng-container matColumnDef="status">
-      <mat-header-cell *matHeaderCellDef> Status </mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.status}} <mat-cell>
-    </ng-container>
-
-    
-
-    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-    <mat-row *matRowDef="let element; columns: displayedColumns;"></mat-row>
-  </mat-table> -->
-  <!-- <ag-grid-angular
-    style="width: 500px; height: 500px;"
-    class="ag-theme-alpine"
-    [rowData]="rowData"
-    [columnDefs]="columnDefs"
->
-</ag-grid-angular> -->
-<div *ngIf="userId == 'admin'">Admin</div>
-<div *ngIf="userId == 'User'">User</div>
+<div *ngIf="userId == 'admin'" class="user">Admin</div>
+<div *ngIf="userId == 'User'"class="user">User</div>
 <div class="row">
         <div class="col-md-2"></div>
         <div class="col-md-8">
@@ -59,14 +13,9 @@
                     <div>
                         <div class="row uploadList" *ngFor="let item of uploader.queue" style="display: flex;">
                             <div style="padding-right: 10px;" class="col-sm-4">{{item.file.name}}</div>
-                            <!-- <div class="col-sm-4">
-                                <div class="progress">
-                                    <div class="progress-bar bg-success" 
-                                    [ngStyle]="{'width':item.progress+'%'}"></div>
-                                </div>
-                            </div> -->
+                            
                             <div class="col-sm-4" >
-                                    <!-- <button type="button" class="btn " (click)="item.upload()">Upload</button> -->
+                                    
                                     <button type="button" style="width: 20px;" class="btn " (click)="item.remove()">x</button>
                             </div>
                         </div>                        
@@ -78,31 +27,7 @@
                 </div>                
             </div>
     
-    <!-- <input
-      style="display: none"
-      type="file" (change)="onFileChanged($event)"
-      #fileInput>
-    <button (click)="fileInput.click()" style="flex-direction: row;">Select File</button>
-    <button (click)="onUpload()">Upload!</button> -->
-    <!-- <div style="text-align:center; margin-top: 100px; "><mat-card style="margin-top:10px; width: 50%;">  
-      <mat-card-content>  
-          <ul>  
-              <li *ngFor="let file of files">  
-                  <mat-progress-bar [value]="file.progress"></mat-progress-bar>  
-                  <span id="file-label">  
-                        
-                  </span>  
-              </li>  
-          </ul>  
-      </mat-card-content>  
-      <mat-card-actions>  
-          <button mat-button color="warn" (click)="onClick()">  
-              <mat-icon>file_upload</mat-icon>  
-              Upload  
-          </button>  
-      </mat-card-actions>  
-  </mat-card><input type="file" #fileUpload id="fileUpload" name="fileUpload" multiple="multiple" accept="image/*" style="display:none;" /></div>
-     -->
+  
     <br>
     <br>
     <div>

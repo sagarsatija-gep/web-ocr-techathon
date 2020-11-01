@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class DashboardPageService {
-  // SERVER_URL: string = "http://localhost:5000/api/upload-documents/"; 
+   
   constructor(private http: HttpClient) { 
   }
   httpOptions = {
@@ -14,13 +14,7 @@ export class DashboardPageService {
       'Content-Type': 'multipart/form-data'
     })
   }  
-  // public upload(formData) {
-  //  debugger;
-  //   return this.http.post<any>(this.SERVER_URL, formData, {  
-  //       reportProgress: true,  
-  //       observe: 'events'  
-  //     });  
-  // }
+  
 
   public getOcrProcessed(statudId:number): Observable<any> {
     

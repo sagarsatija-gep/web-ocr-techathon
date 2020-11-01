@@ -17,17 +17,11 @@ export class DetailsOcrService {
   }  
   getEmployee(id): Observable<any> {
     return this.http.get(this.apiURL + `/api/invoice/${id}`);
-    // .pipe(
-    //   retry(1),
-    //   catchError(this.handleError)
-    // )
+   
   }  
   getInvoice(id): Observable<any> {
     return this.http.get(this.apiURL + `/api/invoice/search/${id}`);
-    // .pipe(
-    //   retry(1),
-    //   catchError(this.handleError)
-    // )
+    
   }  
   updateEmployee( employee): Observable<any> {
     return this.http.post(this.apiURL + '/api/invoice/edit', employee,this.httpOptions)
@@ -46,10 +40,10 @@ export class DetailsOcrService {
   handleError(error) {
     let errorMessage = '';
     if(error.error instanceof ErrorEvent) {
-      // Get client-side error
+      
       errorMessage = error.error.message;
     } else {
-      // Get server-side error
+      
       errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
     }
     window.alert(errorMessage);

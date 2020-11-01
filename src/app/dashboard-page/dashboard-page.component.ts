@@ -1,14 +1,10 @@
-import { HttpClient, HttpErrorResponse, HttpEventType } from '@angular/common/http';
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Component,  OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { FileItem, FileSelectDirective, FileUploader} from 'ng2-file-upload';
-import { Observable } from 'rxjs';
+import { FileItem,  FileUploader} from 'ng2-file-upload';
 import { DashboardPageService } from './dashboard-page.service';
-import { map } from 'rxjs/operators';
 import 'rxjs/Rx';
-import * as moment from 'moment';
-import { of } from 'rxjs';  
-import { catchError } from 'rxjs/operators'; 
+import * as moment from 'moment'; 
 import { RestApiService } from '../shared/rest-api.service';
 
 const uri = 'http://localhost:5000/api/upload-documents';
@@ -31,34 +27,24 @@ export class DashboardPageComponent implements OnInit{
       "image/jpeg", "image/png", "application/pdf"
     ]});
 
-    // attachmentList:any = [];
-    // userId;
-    // userName;
-
-   //file;
-  //  @ViewChild("fileUpload", {static: false}) fileUpload: ElementRef;files  = [];  
+   
     constructor(private route: Router,
       private _dashboardService:DashboardPageService,
       private service:RestApiService,
       private http : HttpClient){
         
     }
-    //userId=this.service.getUserType()
+   
   ngOnInit(): void {
     this.userId=this.service.getUserType()
     this.uploader.uploadAll();
         this.uploader.onAfterAddingFile = (fileItem: FileItem) => {  if (!fileItem.file.type)  fileItem.file.type = 'multipart/form-data'; };
     this.uploader.onCompleteItem = (item: any, response: any, status: any, headers: any) => {
          console.log('FileUpload:uploaded successfully:', item, status, response,headers);
-         //alert('Your file has been uploaded successfully');
+        
     };
  
-    // this.uploader.uploadAll();
-    //     this.uploader.onAfterAddingFile = (file) => { file.formData =file._file; };
-    // this.uploader.onCompleteItem = (item: any, response: any, status: any, headers: any) => {
-    //      console.log('FileUpload:uploaded successfully:', item, status, response);
-    //      //alert('Your file has been uploaded successfully');
-    // };
+   
     this._dashboardService.getOcrAll().subscribe(res=>{
 
       this.rowDataAll=res;
@@ -66,12 +52,35 @@ export class DashboardPageComponent implements OnInit{
       if(res[i].uploadedBy=='5f9c4151c6f8e54c3bfd51a6'){
         this.rowDataAll[i].uploadedBy="John Smith";
       }}
-      //console.log(this.rowDataAll)
-      // for(let i=11;i<res.length;i++){
-      //   if(res[i].documentDetail.invoiceNo!=''){
-      //     this.rowDataAll[i].documentDetail.invoiceNo=res[i].documentDetail.invoiceNo;
-      //   }}
-      console.log(res);
+      for(let i=0;i<res.length;i++){
+      switch(res[i].statusId){
+        case 1:{
+          this.rowDataAll[i].statusId="Draft";
+          break;
+        };
+        case 2:{
+          this.rowDataAll[i].statusId="InProgress";
+          break;
+        };
+        case 3:{
+          this.rowDataAll[i].statusId="UnProcessed";
+          break;
+        };
+        case 4:{
+          this.rowDataAll[i].statusId="Processed";
+          break;
+        };
+        case 5:{
+          this.rowDataAll[i].statusId="Finalized";
+          break;
+        };
+        default:{
+          this.rowDataAll[i].statusId="InProgress";
+          break;
+        }
+      }
+    }
+      
       
     });
     this._dashboardService.getOcrProcessed(4).subscribe(res=>{
@@ -80,7 +89,7 @@ export class DashboardPageComponent implements OnInit{
         if(res[i].uploadedBy=='5f9c4151c6f8e54c3bfd51a6'){
           this.rowDataProcessed[i].uploadedBy="John Smith";
         }}
-      console.log(res);
+     
     });
     this._dashboardService.getOcrUnProcessed(3).subscribe(res=>{
       this.rowDataUnProcessed=res;
@@ -88,7 +97,27 @@ export class DashboardPageComponent implements OnInit{
         if(res[i].uploadedBy=='5f9c4151c6f8e54c3bfd51a6'){
           this.rowDataUnProcessed[i].uploadedBy="John Smith";
         }}
-      //console.log(res);
+        for(let i=0;i<res.length;i++){
+          switch(res[i].reasonId){
+            case 1:{
+              this.rowDataUnProcessed[i].reasonId="Unable to detect character from document";
+              break;
+            };
+            case 2:{
+              this.rowDataUnProcessed[i].reasonId="Unable to update OCR converted document";
+              break;
+            };
+            case 3:{
+              this.rowDataUnProcessed[i].reasonId="Unable to detect document in PDF format";
+              break;
+            };
+            default:{
+              this.rowDataUnProcessed[i].statusId="Unable to detect character from document";
+              break;
+            }
+          }
+        }
+     
     });
     this._dashboardService.getOcrFinalized(5).subscribe(res=>{
       this.rowDataFinal=res;
@@ -96,7 +125,7 @@ export class DashboardPageComponent implements OnInit{
         if(res[i].uploadedBy=='5f9c4151c6f8e54c3bfd51a6'){
           this.rowDataFinal[i].uploadedBy="John Smith";
         }}
-      //console.log(res);
+      
     });
     this._dashboardService.getOcrInprogress(2).subscribe(res=>{
       this.rowDataInprogress=res;
@@ -104,51 +133,11 @@ export class DashboardPageComponent implements OnInit{
         if(res[i].uploadedBy=='5f9c4151c6f8e54c3bfd51a6'){
           this.rowDataInprogress[i].uploadedBy="John Smith";
         }}
-      //console.log(res);
+      
     });
     
   }
-//   uploadFile(file) {  
-//     const formData = new FormData();  
-//     formData.append('file', file.data);  
-//     file.inProgress = true;  
-//     this._dashboardService.upload(file.data).pipe(  
-//       map(event => {  
-//         switch (event.type) {  
-//           case HttpEventType.UploadProgress:  
-//             file.progress = Math.round(event.loaded * 100 / event.total);  
-//             break;  
-//           case HttpEventType.Response:  
-//             return event;  
-//         }  
-//       }),  
-//       catchError((error: HttpErrorResponse) => {  
-//         file.inProgress = false;  
-//         return of(`${file.data.name} upload failed.`);  
-//       })).subscribe((event: any) => {  
-//         if (typeof (event) === 'object') {  
-//           console.log(event.body);  
-//         }  
-//       });  
-//   }
-//   private uploadFiles() {  
-//     this.fileUpload.nativeElement.value = '';  
-//     this.files.forEach(file => {  
-//       this.uploadFile(file);  
-//     });  
-// }
-// onClick() {  
-//   const fileUpload = this.fileUpload.nativeElement;fileUpload.onchange = () => {  
-//   for (let index = 0; index < fileUpload.files.length; index++)  
-//   {  
-//    const file = fileUpload.files[index];  
-//    this.files.push({ data: file, inProgress: false, progress: 0});  
-//   }  
-//     this.uploadFiles();  
-//   };  
-//   fileUpload.click();  
-// }
-  
+
   onRowClicked(event: any) 
   { 
     let id=event.data.invoiceDocumentId;
@@ -172,6 +161,9 @@ export class DashboardPageComponent implements OnInit{
   { headerName:'InvoiceNo',
       field: 'documentDetail.invoiceNo',
     width:300 },
+    { headerName:'Status',
+      field: 'statusId',
+    width:300 },
  
     { headerName:'UploadedBy',
       field: 'uploadedBy',
@@ -182,7 +174,7 @@ export class DashboardPageComponent implements OnInit{
       valueFormatter: function (params){
        return moment (params.value).format ('MM/DD/YYYY HH:mm');
       }}
-      //invoiceDocumentId
+      
 ];
 rowDataAll:any;
 columnDefsInprogress = [
@@ -207,7 +199,7 @@ columnDefsInprogress = [
     width:300,
     valueFormatter: function (params){
       return moment (params.value).format ('MM/DD/YYYY HH:mm');
-     }}//invoiceDocumentId
+     }}
 ];
 rowDataInprogress:any;
 columnDefsFinal = [
@@ -232,7 +224,7 @@ columnDefsFinal = [
     width:300,
     valueFormatter: function (params){
       return moment (params.value).format ('MM/DD/YYYY HH:mm');
-     }}//invoiceDocumentId
+     }}
 ];
 rowDataFinal:any;
 columnDefsProcessed = [
@@ -274,6 +266,9 @@ columnDefsUnProcessed = [
   },
   { headerName:'InvoiceNo',
   field: 'documentDetail.invoiceNo',
+width:300 },
+{ headerName:'Reason',
+  field: 'reasonId',
 width:300 },
     { headerName:'UploadedBy',
       field: 'uploadedBy' ,

@@ -9,8 +9,9 @@ import 'rxjs/Rx';
 import * as moment from 'moment';
 import { of } from 'rxjs';  
 import { catchError } from 'rxjs/operators'; 
+import { RestApiService } from '../shared/rest-api.service';
 
-const uri = 'http://localhost:4000/api/upload';
+const uri = 'http://localhost:5000/api/upload';
 @Component({
   selector: 'app-dashboard-page',
   templateUrl: './dashboard-page.component.html',
@@ -19,7 +20,7 @@ const uri = 'http://localhost:4000/api/upload';
 // var uo: FileUploaderOptions = {};
 // uo.headers = [{ name: 'x-ms-blob-type', value : 'BlockBlob' } ]
 export class DashboardPageComponent implements OnInit{
-  
+  userId:any;
   public uploader:FileUploader = new FileUploader({url:uri,
     headers: [{
       name:'Content-Type',
@@ -38,13 +39,13 @@ export class DashboardPageComponent implements OnInit{
   //  @ViewChild("fileUpload", {static: false}) fileUpload: ElementRef;files  = [];  
     constructor(private route: Router,
       private _dashboardService:DashboardPageService,
-      
+      private service:RestApiService,
       private http : HttpClient){
         
     }
-
+    //userId=this.service.getUserType()
   ngOnInit(): void {
-
+    this.userId=this.service.getUserType()
     this.uploader.uploadAll();
         this.uploader.onAfterAddingFile = (fileItem: FileItem) => {  if (!fileItem.file.type)  fileItem.file.type = 'multipart/form-data'; };
     this.uploader.onCompleteItem = (item: any, response: any, status: any, headers: any) => {
@@ -77,20 +78,32 @@ export class DashboardPageComponent implements OnInit{
       this.rowDataProcessed=res;
       for(let i=0;i<res.length;i++){
         if(res[i].uploadedBy=='5f9c4151c6f8e54c3bfd51a6'){
-          this.rowDataAll[i].uploadedBy="John Smith";
+          this.rowDataProcessed[i].uploadedBy="John Smith";
         }}
       //console.log(res);
     });
     this._dashboardService.getOcrUnProcessed(3).subscribe(res=>{
       this.rowDataUnProcessed=res;
+      for(let i=0;i<res.length;i++){
+        if(res[i].uploadedBy=='5f9c4151c6f8e54c3bfd51a6'){
+          this.rowDataUnProcessed[i].uploadedBy="John Smith";
+        }}
       //console.log(res);
     });
     this._dashboardService.getOcrFinalized(5).subscribe(res=>{
       this.rowDataFinal=res;
+      for(let i=0;i<res.length;i++){
+        if(res[i].uploadedBy=='5f9c4151c6f8e54c3bfd51a6'){
+          this.rowDataFinal[i].uploadedBy="John Smith";
+        }}
       //console.log(res);
     });
     this._dashboardService.getOcrInprogress(2).subscribe(res=>{
       this.rowDataInprogress=res;
+      for(let i=0;i<res.length;i++){
+        if(res[i].uploadedBy=='5f9c4151c6f8e54c3bfd51a6'){
+          this.rowDataInprogress[i].uploadedBy="John Smith";
+        }}
       //console.log(res);
     });
     
@@ -183,7 +196,9 @@ columnDefsInprogress = [
       cellRenderer: (invNum) => 
               `<a href="/details-ocr/${invNum.data.invoiceDocumentId}" >${invNum.value}</a>` 
 },
-
+{ headerName:'InvoiceNo',
+      field: 'documenDetail.invoiceNo',
+    width:300 },
   { headerName:'UploadedBy',
     field: 'uploadedBy',
     width:300 },
@@ -206,7 +221,9 @@ columnDefsFinal = [
       cellRenderer: (invNum) => 
               `<a href="/details-ocr/${invNum.data.invoiceDocumentId}" >${invNum.value}</a>` 
 },
-
+{ headerName:'InvoiceNo',
+      field: 'documenDetail.invoiceNo',
+    width:300 },
   { headerName:'UploadedBy',
     field: 'uploadedBy' ,
     width:300},
@@ -229,7 +246,9 @@ columnDefsProcessed = [
       cellRenderer: (invNum) => 
               `<a href="/details-ocr/${invNum.data.invoiceDocumentId}" >${invNum.value}</a>` 
 },
-
+{ headerName:'InvoiceNo',
+      field: 'documenDetail.invoiceNo',
+    width:300 },
 { headerName:'UploadedBy',
   field: 'uploadedBy' ,
   width:300},
@@ -253,7 +272,9 @@ columnDefsUnProcessed = [
       cellRenderer: (invNum) => 
               `<a href="/details-ocr/${invNum.data.invoiceDocumentId}" >${invNum.value}</a>` 
   },
- 
+  { headerName:'InvoiceNo',
+  field: 'documenDetail.invoiceNo',
+width:300 },
     { headerName:'UploadedBy',
       field: 'uploadedBy' ,
       width:300},

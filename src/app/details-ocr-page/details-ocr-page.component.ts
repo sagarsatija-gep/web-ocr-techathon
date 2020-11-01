@@ -1,5 +1,5 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, Route } from '@angular/router';
 import { DetailsOcrService } from './details-ocr.service';
 import {  Input } from '@angular/core';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -145,10 +145,13 @@ redirectTo(uri:string){
 }
 @Component({
   selector: 'ngbd-modal-content',
-  template: `<div class="modal-content" style ="position: relative;
-  display: flex;
+  template: `<div class="modal-content" style ="
   flex-direction: column;
-  width: 100%;
+  display:flex;
+  position: fixed;
+  left: 600px;
+  top: 200px;   
+  width:400px;
   pointer-events: auto;
   background-color: #fff;
   background-clip: padding-box;
@@ -162,15 +165,10 @@ redirectTo(uri:string){
   border-bottom: 1px solid #dee2e6;
   border-top-left-radius: calc(.3rem - 1px);
   border-top-right-radius: calc(.3rem - 1px);" >
-      <h4 class="modal-title">Hi there!</h4>
+      <h4 class="modal-title">Reciept is Finalized</h4>
       <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
         <span aria-hidden="true">&times;</span>
       </button>
-    </div>
-    <div class="modal-body" style="position: relative;
-    flex: 1 1 auto;
-    padding: 1rem;">
-      <p>Hello, {{name}}!</p>
     </div>
     <div class="modal-footer" style="display: flex;
     flex-wrap: wrap;
@@ -180,7 +178,7 @@ redirectTo(uri:string){
     border-top: 1px solid #dee2e6;
     border-bottom-right-radius: calc(.3rem - 1px);
     border-bottom-left-radius: calc(.3rem - 1px);">
-      <button type="button" class="btn btn-outline-dark" (click)="activeModal.close('Close click')">Close</button>
+      <button type="button" class="btn btn-outline-dark" (click)="onOkay()">Okay</button>
     </div></div>
     
   `
@@ -188,6 +186,10 @@ redirectTo(uri:string){
 export class NgbdModalContent {
   @Input() name;
 
-  constructor(public activeModal: NgbActiveModal) {}
+  constructor(public activeModal: NgbActiveModal,private route:Router) {}
+  onOkay(){
+    this.activeModal.close('Close click')
+    this.route.navigate(['/dashboard'])
+  }
 }
 

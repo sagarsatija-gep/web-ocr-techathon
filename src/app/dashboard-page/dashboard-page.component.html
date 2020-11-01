@@ -44,6 +44,8 @@
     [columnDefs]="columnDefs"
 >
 </ag-grid-angular> -->
+<div *ngIf="userId == 'admin'">Admin</div>
+<div *ngIf="userId == 'User'">User</div>
 <div class="row">
         <div class="col-md-2"></div>
         <div class="col-md-8">

@@ -108,9 +108,14 @@ onNewInvoiceNumber(InvoiceId){
     // this.Tax=res[0]['invoiceTax']
     // this.Total=res[0]['invoiceTotal']
     console.log(res[0]['_id'])
-    this.route.navigate([`/details-ocr/${res[0]['_id']}`])
+    //this.route.navigate([`/details-ocr/${res[0]['_id']}`]);
+    this.redirectTo(`/details-ocr/${res[0]['_id']}`);
   });     
 
+}
+redirectTo(uri:string){
+  this.route.navigateByUrl('/', {skipLocationChange: true}).then(()=>
+  this.route.navigate([uri]));
 }
 
 // rowData = [

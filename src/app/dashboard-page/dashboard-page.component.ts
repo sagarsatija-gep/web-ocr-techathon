@@ -1,13 +1,14 @@
-import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { HttpClient, HttpErrorResponse, HttpEventType } from '@angular/common/http';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { FileSelectDirective, FileUploader, FileUploaderOptions} from 'ng2-file-upload';
+import { FileItem, FileSelectDirective, FileUploader} from 'ng2-file-upload';
 import { Observable } from 'rxjs';
 import { DashboardPageService } from './dashboard-page.service';
 import { map } from 'rxjs/operators';
 import 'rxjs/Rx';
 import * as moment from 'moment';
-import { RestApiService } from '../shared/rest-api.service';
+import { of } from 'rxjs';  
+import { catchError } from 'rxjs/operators'; 
 
 const uri = 'http://localhost:4000/api/upload';
 @Component({
@@ -18,56 +19,37 @@ const uri = 'http://localhost:4000/api/upload';
 // var uo: FileUploaderOptions = {};
 // uo.headers = [{ name: 'x-ms-blob-type', value : 'BlockBlob' } ]
 export class DashboardPageComponent implements OnInit{
-  userId;
+  
   public uploader:FileUploader = new FileUploader({url:uri,
+    headers: [{
+      name:'Content-Type',
+      value: 'multipart/form-data'
+    }],
     itemAlias: 'file',
-    // headers: [{
-    //   name:'Content-Type',
-    //   value: 'multipart/form-data'
-    // }]
-  });
-    // headers: {
-    //   'Content-Type':'multipart/form-data'
-    // }
+    allowedMimeType:[
+      "image/jpeg", "image/png", "application/pdf"
+    ]});
 
+    // attachmentList:any = [];
+    // userId;
+    // userName;
 
-    attachmentList:any = [];
    //file;
-    
+  //  @ViewChild("fileUpload", {static: false}) fileUpload: ElementRef;files  = [];  
     constructor(private route: Router,
       private _dashboardService:DashboardPageService,
-      private service:RestApiService,
+      
       private http : HttpClient){
-
-        // this.uploader.onCompleteItem = (item:any, response:any , status:any, headers:any) => {
-        //     //this.attachmentList.push(JSON.parse(response));
-        //     console.log(JSON.parse(response));
-        // }
         
     }
-    //multipart/form-data
 
-//     public uploader: FileUploader = new FileUploader({ url: uploadAPI, itemAlias: 'file' });
-//   ngOnInit() {
-//     this.uploader.onAfterAddingFile = (file) => { file.withCredentials = false; };
-//     this.uploader.onCompleteItem = (item: any, response: any, status: any, headers: any) => {
-//          console.log('FileUpload:uploaded successfully:', item, status, response);
-//          alert('Your file has been uploaded successfully');
-//     };
-//  }
   ngOnInit(): void {
-    // this.http.get(`http://localhost:5000/api/ocr`).subscribe(res=>{
-    //   this.rowDataAll=res;
-    //   console.log(res);
-    // });
-   this.userId=this.service.getUserType()
-   console.log(this.userId)
-    this.uploader.onAfterAddingFile = (file) => { file.withCredentials = false; };
 
+    this.uploader.uploadAll();
+        this.uploader.onAfterAddingFile = (fileItem: FileItem) => {  if (!fileItem.file.type)  fileItem.file.type = 'multipart/form-data'; };
     this.uploader.onCompleteItem = (item: any, response: any, status: any, headers: any) => {
-      console.log(headers)
          console.log('FileUpload:uploaded successfully:', item, status, response,headers);
-        // alert('Your file has been uploaded successfully');
+         //alert('Your file has been uploaded successfully');
     };
  
     // this.uploader.uploadAll();
@@ -77,27 +59,82 @@ export class DashboardPageComponent implements OnInit{
     //      //alert('Your file has been uploaded successfully');
     // };
     this._dashboardService.getOcrAll().subscribe(res=>{
+
       this.rowDataAll=res;
-      console.log(res);
+      for(let i=0;i<res.length;i++){
+      if(res[i].uploadedBy=='5f9c4151c6f8e54c3bfd51a6'){
+        this.rowDataAll[i].uploadedBy="John Smith";
+      }}
+      //console.log(this.rowDataAll)
+      // for(let i=11;i<res.length;i++){
+      //   if(res[i].documenDetail.invoiceNo!=''){
+      //     this.rowDataAll[i].documenDetail.invoiceNo=res[i].documenDetail.invoiceNo;
+      //   }}
+      //console.log(res);
+      
     });
-    this._dashboardService.getOcrProcessed(3).subscribe(res=>{
+    this._dashboardService.getOcrProcessed(4).subscribe(res=>{
       this.rowDataProcessed=res;
-      console.log(res);
+      for(let i=0;i<res.length;i++){
+        if(res[i].uploadedBy=='5f9c4151c6f8e54c3bfd51a6'){
+          this.rowDataAll[i].uploadedBy="John Smith";
+        }}
+      //console.log(res);
     });
-    this._dashboardService.getOcrUnProcessed(4).subscribe(res=>{
+    this._dashboardService.getOcrUnProcessed(3).subscribe(res=>{
       this.rowDataUnProcessed=res;
-      console.log(res);
+      //console.log(res);
     });
     this._dashboardService.getOcrFinalized(5).subscribe(res=>{
       this.rowDataFinal=res;
-      console.log(res);
+      //console.log(res);
     });
     this._dashboardService.getOcrInprogress(2).subscribe(res=>{
       this.rowDataInprogress=res;
-      console.log(res);
+      //console.log(res);
     });
     
   }
+//   uploadFile(file) {  
+//     const formData = new FormData();  
+//     formData.append('file', file.data);  
+//     file.inProgress = true;  
+//     this._dashboardService.upload(file.data).pipe(  
+//       map(event => {  
+//         switch (event.type) {  
+//           case HttpEventType.UploadProgress:  
+//             file.progress = Math.round(event.loaded * 100 / event.total);  
+//             break;  
+//           case HttpEventType.Response:  
+//             return event;  
+//         }  
+//       }),  
+//       catchError((error: HttpErrorResponse) => {  
+//         file.inProgress = false;  
+//         return of(`${file.data.name} upload failed.`);  
+//       })).subscribe((event: any) => {  
+//         if (typeof (event) === 'object') {  
+//           console.log(event.body);  
+//         }  
+//       });  
+//   }
+//   private uploadFiles() {  
+//     this.fileUpload.nativeElement.value = '';  
+//     this.files.forEach(file => {  
+//       this.uploadFile(file);  
+//     });  
+// }
+// onClick() {  
+//   const fileUpload = this.fileUpload.nativeElement;fileUpload.onchange = () => {  
+//   for (let index = 0; index < fileUpload.files.length; index++)  
+//   {  
+//    const file = fileUpload.files[index];  
+//    this.files.push({ data: file, inProgress: false, progress: 0});  
+//   }  
+//     this.uploadFiles();  
+//   };  
+//   fileUpload.click();  
+// }
   
   onRowClicked(event: any) 
   { 
@@ -111,8 +148,17 @@ export class DashboardPageComponent implements OnInit{
     { headerName:'FileName',
       field: 'fileName' ,
       rowSelection:'single',
-      width:300
+      width:300,
+      resizable:true,
+      headerTooltip:'FileName',
+      enableTooltip : true,
+      cellRenderer: (invNum) => 
+              `<a href="/details-ocr/${invNum.data.invoiceDocumentId}" >${invNum.value}</a>` 
+      
   },
+  { headerName:'InvoiceNo',
+      field: 'documenDetail.invoiceNo',
+    width:300 },
  
     { headerName:'UploadedBy',
       field: 'uploadedBy',
@@ -121,7 +167,7 @@ export class DashboardPageComponent implements OnInit{
       field: 'uploadedDate',
       width:300,
       valueFormatter: function (params){
-       return moment (params.value).format ('MM/DD/YYYY');
+       return moment (params.value).format ('MM/DD/YYYY HH:mm');
       }}
       //invoiceDocumentId
 ];
@@ -130,7 +176,12 @@ columnDefsInprogress = [
   { headerName:'FileName',
     field: 'fileName' ,
     rowSelection:'single',
-    width:300
+    width:300,
+    resizable:true,
+      headerTooltip:'FileName',
+      enableTooltip : true,
+      cellRenderer: (invNum) => 
+              `<a href="/details-ocr/${invNum.data.invoiceDocumentId}" >${invNum.value}</a>` 
 },
 
   { headerName:'UploadedBy',
@@ -140,7 +191,7 @@ columnDefsInprogress = [
     field: 'uploadedDate',
     width:300,
     valueFormatter: function (params){
-      return moment (params.value).format ('MM/DD/YYYY');
+      return moment (params.value).format ('MM/DD/YYYY HH:mm');
      }}//invoiceDocumentId
 ];
 rowDataInprogress:any;
@@ -148,7 +199,12 @@ columnDefsFinal = [
   { headerName:'FileName',
     field: 'fileName' ,
     rowSelection:'single',
-    width:300
+    width:300,
+    resizable:true,
+      headerTooltip:'FileName',
+      enableTooltip : true,
+      cellRenderer: (invNum) => 
+              `<a href="/details-ocr/${invNum.data.invoiceDocumentId}" >${invNum.value}</a>` 
 },
 
   { headerName:'UploadedBy',
@@ -158,7 +214,7 @@ columnDefsFinal = [
     field: 'uploadedDate',
     width:300,
     valueFormatter: function (params){
-      return moment (params.value).format ('MM/DD/YYYY');
+      return moment (params.value).format ('MM/DD/YYYY HH:mm');
      }}//invoiceDocumentId
 ];
 rowDataFinal:any;
@@ -166,7 +222,12 @@ columnDefsProcessed = [
   { headerName:'FileName',
   field: 'fileName' ,
   rowSelection:'single',
-  width:300
+  width:300,
+  resizable:true,
+      headerTooltip:'FileName',
+      enableTooltip : true,
+      cellRenderer: (invNum) => 
+              `<a href="/details-ocr/${invNum.data.invoiceDocumentId}" >${invNum.value}</a>` 
 },
 
 { headerName:'UploadedBy',
@@ -176,7 +237,7 @@ columnDefsProcessed = [
   field: 'uploadedDate',
   width:300,
   valueFormatter: function (params){
-    return moment (params.value).format ('MM/DD/YYYY');
+    return moment (params.value).format ('MM/DD/YYYY HH:mm');
    }}
 ];
 
@@ -185,7 +246,12 @@ columnDefsUnProcessed = [
   { headerName:'FileName',
       field: 'fileName' ,
       rowSelection:'single',
-      width:300
+      width:300,
+      resizable:true,
+      headerTooltip:'FileName',
+      enableTooltip : true,
+      cellRenderer: (invNum) => 
+              `<a href="/details-ocr/${invNum.data.invoiceDocumentId}" >${invNum.value}</a>` 
   },
  
     { headerName:'UploadedBy',
@@ -195,7 +261,7 @@ columnDefsUnProcessed = [
       field: 'uploadedDate',
       width:300,
       valueFormatter: function (params){
-        return moment (params.value).format ('MM/DD/YYYY');
+        return moment (params.value).format ('MM/DD/YYYY HH:mm');
        }}
   
 ];

@@ -10,6 +10,11 @@ import { DetailsOcrPageComponent } from './details-ocr-page/details-ocr-page.com
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { AgGridModule } from 'ag-grid-angular';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatIconModule } from '@angular/material/icon';
+import { MatCardModule } from '@angular/material/card';
+import { MatButtonModule } from '@angular/material/button';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 //import { AgGridModule } from 'ag-grid-angular';
 import {FileUploadModule} from 'ng2-file-upload';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -33,7 +38,11 @@ import { CommonModule } from '@angular/common';
     BrowserAnimationsModule,
     HttpClientModule,
     ReactiveFormsModule,
-    CommonModule
+    MatToolbarModule,  
+    MatIconModule,  
+    MatButtonModule,  
+    MatCardModule,  
+    MatProgressBarModule
   ],
   providers: [],
   bootstrap: [AppComponent]

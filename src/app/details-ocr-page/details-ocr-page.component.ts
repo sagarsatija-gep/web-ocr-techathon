@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { DetailsOcrService } from './details-ocr.service';
 //import { HttpClient } from '@angular/common/http';
@@ -8,9 +8,10 @@ import { DetailsOcrService } from './details-ocr.service';
   templateUrl: './details-ocr-page.component.html',
   styleUrls: ['./details-ocr-page.component.css']
 })
-export class DetailsOcrPageComponent implements OnInit {
+export class DetailsOcrPageComponent implements OnInit,AfterViewInit {
   url;
-  InvoiceId;
+  imageUrl;
+  InvoiceId:'100';
   gridColumnApi;
   private gridApi;
   subTotal;
@@ -19,6 +20,22 @@ export class DetailsOcrPageComponent implements OnInit {
   val="";
   constructor(private route: Router,private apiservice:DetailsOcrService) { }
 data;
+ngAfterViewInit() {
+  // ...
+  this.url=this.route.url;
+    this.url = this.url.split('/')[2];
+    console.log(this.url)
+     this.apiservice.getEmployee(this.url).subscribe(res=>{
+      this.data=res;
+      this.rowData=res[0]['lineDetail']
+      this.val=res[0]['invoiceNo']
+      this.subTotal=res[0]['invoiceSubTotal'];
+      this.Tax=res[0]['invoiceTax']
+      this.Total=res[0]['invoiceTotal']
+      this.imageUrl='http://localhost:5000/uploads'+res[0]['fileUrl']
+      console.log(res)
+    });  
+}
    ngOnInit(): void {
     this.url=this.route.url;
     this.url = this.url.split('/')[2];
@@ -39,12 +56,7 @@ data;
     this.gridColumnApi = params.columnApi;
   }
   rowData;
-  columnDefs = [
-    // {
-    //   checkboxSelection:true,
-
-    // },
-    
+  columnDefs = [  
     { 
       headerName: 'Line Number',
       checkboxSelection:true,
@@ -88,6 +100,16 @@ onSubmit(){
   })
 }
 onNewInvoiceNumber(InvoiceId){
+  this.apiservice.getInvoice(InvoiceId).subscribe(res=>{
+    // this.data=res;
+    // this.rowData=res[0]['lineDetail']
+    // this.val=res[0]['invoiceNo']
+    // this.subTotal=res[0]['invoiceSubTotal'];
+    // this.Tax=res[0]['invoiceTax']
+    // this.Total=res[0]['invoiceTotal']
+    console.log(res[0]['_id'])
+    this.route.navigate([`/details-ocr/${res[0]['_id']}`])
+  });     
 
 }
 

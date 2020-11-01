@@ -8,80 +8,21 @@ import { retry, catchError } from 'rxjs/operators';
 })
 
 export class RestApiService {
-  
-  // Define API
-  apiURL = 'http://localhost:5000';
 
-  constructor(private http: HttpClient) { }
+  constructor() { }
 
-  /*========================================
-    CRUD Methods for consuming RESTful API
-  =========================================*/
 
-  // Http Options
-  httpOptions = {
-    headers: new HttpHeaders({
-      'Content-Type': 'application/json'
-    })
-  }  
+  userType:string;
 
-  // HttpClient API get() method => Fetch employees list
-  getEmployees(): Observable<any> {
-    return this.http.get(this.apiURL + '/api/ocr')
-    .pipe(
-      retry(1),
-      catchError(this.handleError)
-    )
+  setUserType(name){
+    if(name=="John Smith"){
+      this.userType='admin'
+    }
+    else{
+      this.userType='User'
+    }
   }
-
-  // HttpClient API get() method => Fetch employee
-  getEmployee(id): Observable<any> {
-    return this.http.get(this.apiURL + '/api/ocr' + id)
-    .pipe(
-      retry(1),
-      catchError(this.handleError)
-    )
-  }  
-
-  // HttpClient API post() method => Create employee
-  // createEmployee(employee): Observable<Employee> {
-  //   return this.http.post<Employee>(this.apiURL + '/employees', JSON.stringify(employee), this.httpOptions)
-  //   .pipe(
-  //     retry(1),
-  //     catchError(this.handleError)
-  //   )
-  // }  
-
-  // HttpClient API put() method => Update employee
-  // updateEmployee(id, employee): Observable<Employee> {
-  //   return this.http.put<Employee>(this.apiURL + '/employees/' + id, JSON.stringify(employee), this.httpOptions)
-  //   .pipe(
-  //     retry(1),
-  //     catchError(this.handleError)
-  //   )
-  // }
-
-  // HttpClient API delete() method => Delete employee
-  // deleteEmployee(id){
-  //   return this.http.delete<Employee>(this.apiURL + '/employees/' + id, this.httpOptions)
-  //   .pipe(
-  //     retry(1),
-  //     catchError(this.handleError)
-  //   )
-  // }
-
-  // Error handling 
-  handleError(error) {
-     let errorMessage = '';
-     if(error.error instanceof ErrorEvent) {
-       // Get client-side error
-       errorMessage = error.error.message;
-     } else {
-       // Get server-side error
-       errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
-     }
-     window.alert(errorMessage);
-     return throwError(errorMessage);
+  getUserType(){
+    return this.userType
   }
-
 }

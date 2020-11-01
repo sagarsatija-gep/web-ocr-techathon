@@ -10,13 +10,14 @@ import * as moment from 'moment';
 import { of } from 'rxjs';  
 import { catchError } from 'rxjs/operators'; 
 
-const uri = 'http://localhost:5000/api/upload-documents';
+const uri = 'http://localhost:4000/api/upload';
 @Component({
   selector: 'app-dashboard-page',
   templateUrl: './dashboard-page.component.html',
   styleUrls: ['./dashboard-page.component.css']
 })
-
+// var uo: FileUploaderOptions = {};
+// uo.headers = [{ name: 'x-ms-blob-type', value : 'BlockBlob' } ]
 export class DashboardPageComponent implements OnInit{
   
   public uploader:FileUploader = new FileUploader({url:uri,
@@ -37,6 +38,7 @@ export class DashboardPageComponent implements OnInit{
   //  @ViewChild("fileUpload", {static: false}) fileUpload: ElementRef;files  = [];  
     constructor(private route: Router,
       private _dashboardService:DashboardPageService,
+      
       private http : HttpClient){
         
     }
@@ -49,6 +51,13 @@ export class DashboardPageComponent implements OnInit{
          console.log('FileUpload:uploaded successfully:', item, status, response,headers);
          //alert('Your file has been uploaded successfully');
     };
+ 
+    // this.uploader.uploadAll();
+    //     this.uploader.onAfterAddingFile = (file) => { file.formData =file._file; };
+    // this.uploader.onCompleteItem = (item: any, response: any, status: any, headers: any) => {
+    //      console.log('FileUpload:uploaded successfully:', item, status, response);
+    //      //alert('Your file has been uploaded successfully');
+    // };
     this._dashboardService.getOcrAll().subscribe(res=>{
 
       this.rowDataAll=res;

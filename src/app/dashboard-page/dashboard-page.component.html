@@ -1,3 +1,4 @@
+
 <!-- <p>dashboard-page works!</p> -->
 
 <!-- <input 
@@ -43,33 +44,36 @@
     [columnDefs]="columnDefs"
 >
 </ag-grid-angular> -->
+<div *ngIf="userId == 'admin'">Admin</div>
+<div *ngIf="userId == 'User'">User</div>
 <div class="row">
         <div class="col-md-2"></div>
         <div class="col-md-8">
-            <div class="row card">
+            <div class="row card" *ngIf="userId == 'admin'">
                 <div class="col-sm-12">
                     <h4>Upload Section</h4>
                     <div id="fileSelector" >
-                        <input type="file" name="fileUplaod" id="fileUpload"
-                        multiple ng2FileSelect [uploader]="uploader">
+                        <input type="file" name="fileUplaod" id="fileUpload" 
+                        multiple ng2FileSelect [uploader]="uploader" accept="image/jpeg, image/png, application/pdf">
                     </div>
                     <div>
-                        <div class="row uploadList" *ngFor="let item of uploader.queue">
-                            <div class="col-sm-4">{{item.file.name}}</div>
-                            <div class="col-sm-4">
+                        <div class="row uploadList" *ngFor="let item of uploader.queue" style="display: flex;">
+                            <div style="padding-right: 10px;" class="col-sm-4">{{item.file.name}}</div>
+                            <!-- <div class="col-sm-4">
                                 <div class="progress">
                                     <div class="progress-bar bg-success" 
                                     [ngStyle]="{'width':item.progress+'%'}"></div>
                                 </div>
-                            </div>
-                            <div class="col-sm-4">
-                                    <button type="button" class="btn " (click)="item.upload()">Upload</button>
-                                    <button type="button" class="btn " (click)="item.remove()">Cancel</button>
+                            </div> -->
+                            <div class="col-sm-4" >
+                                    <!-- <button type="button" class="btn " (click)="item.upload()">Upload</button> -->
+                                    <button type="button" style="width: 20px;" class="btn " (click)="item.remove()">x</button>
                             </div>
                         </div>                        
                     </div>
                     <div class="row" *ngIf="uploader?.queue?.length > 0">
-                            <button type="button" class="btn " (click)="uploader.uploadAll()">Upload All</button>
+                            <button type="button" class="btn " (click)="uploader.uploadAll()" [disabled]="!uploader.getNotUploadedItems().length">Upload </button>
+                            
                     </div>
                 </div>                
             </div>
@@ -80,40 +84,87 @@
       #fileInput>
     <button (click)="fileInput.click()" style="flex-direction: row;">Select File</button>
     <button (click)="onUpload()">Upload!</button> -->
-    
+    <!-- <div style="text-align:center; margin-top: 100px; "><mat-card style="margin-top:10px; width: 50%;">  
+      <mat-card-content>  
+          <ul>  
+              <li *ngFor="let file of files">  
+                  <mat-progress-bar [value]="file.progress"></mat-progress-bar>  
+                  <span id="file-label">  
+                        
+                  </span>  
+              </li>  
+          </ul>  
+      </mat-card-content>  
+      <mat-card-actions>  
+          <button mat-button color="warn" (click)="onClick()">  
+              <mat-icon>file_upload</mat-icon>  
+              Upload  
+          </button>  
+      </mat-card-actions>  
+  </mat-card><input type="file" #fileUpload id="fileUpload" name="fileUpload" multiple="multiple" accept="image/*" style="display:none;" /></div>
+     -->
     <br>
     <br>
-    <br>
-    <mat-tab-group>
+    <div>
+    <section style="font-size:24px;padding-left: 20px ;">MANAGE OCR</section>
+    <div class="dashboard-tabs " >
+      <div>
+      
+    <mat-tab-group >
         <mat-tab label="All"
-        style="width: 100%;"> Content 1 
+        style="width: 100%;"> 
         <ag-grid-angular 
-        style="width: 100%; height: 200px;"
+        style="width: 100%;height: 400px;overflow-y: auto;"
         class="ag-theme-alpine"
         [rowData]="rowDataAll"
         [columnDefs]="columnDefsAll"
+        (rowClicked)='onRowClicked($event)'
       >
     </ag-grid-angular>
         </mat-tab>
-        <mat-tab label="UnProcessed"> Content 2 
+        <mat-tab label="UnProcessed">  
             <ag-grid-angular
-        style="width: 100%; height: 100%;"
+        style="width: 100%; height: 400px;"
+        class="ag-theme-alpine"
+        [rowData]="rowDataUnProcessed"
+        [columnDefs]="columnDefsUnProcessed"
+      >
+    </ag-grid-angular>
+        </mat-tab>
+        <mat-tab label="Processed">  
+            <ag-grid-angular
+        style="width: 100%; height: 400px;"
         class="ag-theme-alpine"
         [rowData]="rowDataProcessed"
         [columnDefs]="columnDefsProcessed"
       >
     </ag-grid-angular>
         </mat-tab>
-        <mat-tab label="Processed"> Content 3 
-            <ag-grid-angular
-        style="width: 100%; height: 100%;"
+        <mat-tab label="Finalized"
+        style="width: 100%;"> 
+        <ag-grid-angular 
+        style="width: 100%; height: 400px;"
         class="ag-theme-alpine"
-        [rowData]="rowDataProcessed"
-        [columnDefs]="columnDefsProcessed"
+        [rowData]="rowDataFinal"
+        [columnDefs]="columnDefsFinal"
+        (rowClicked)='onRowClicked($event)'
+      >
+    </ag-grid-angular>
+        </mat-tab>
+        <mat-tab label="InProgress"
+        style="width: 100%;"> 
+        <ag-grid-angular 
+        style="width: 100%; height: 400px;"
+        class="ag-theme-alpine"
+        [rowData]="rowDataInprogress"
+        [columnDefs]="columnDefsInprogress"
+        (rowClicked)='onRowClicked($event)'
       >
     </ag-grid-angular>
         </mat-tab>
       </mat-tab-group>
+    </div>
+  </div>
       <br>
       
     

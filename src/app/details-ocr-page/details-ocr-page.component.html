@@ -1,14 +1,14 @@
-<div class="container-fluid bg-gray">
     <div class="row">
+            <span class="pageHeadings">{{val || "Not selected"}}</span>
         <div class="Search Widget">
             <label style="margin:15px 30px 20px 30px;font-size: 20px">Enter Invoice Number</label>
-            <input style="margin:10px" type="text" >
-            <button style="margin:10px" class="btn"> Save</button>
+            <input style="margin:10px" type="text" [(ngModel)]="InvoiceId">
+            <button style="margin:10px" class="btn" (click)="onNewInvoiceNumber(InvoiceId)" formtarget="_blank">Get Invoice Details</button>
         </div>
         <div class="Image Widget" >
             <section style="font-size:24px">SCANNED DOCUMENT</section>
             <div id='mydiv' style="text-align:center">                
-                    <img src='https://templates.invoicehome.com/invoice-template-us-mono-black-750px.png' />
+                    <img src={{imageUrl}} />
             </div>
         </div>
         <div class="Table Widget">  
@@ -16,9 +16,36 @@
                 <ag-grid-angular style="width: 100%; height: 200px;"
                 class="ag-theme-alpine"
                 [rowData]="rowData"
-                [columnDefs]="columnDefs">
+                [columnDefs]="columnDefs"
+                (gridReady)="onGridReady($event)"
+                rowSelection="multiple"
+                >
             </ag-grid-angular>
+            <div ><span>Sub Total : </span> {{subTotal}}</div>
+            <div ><span>Tax :  </span>{{Tax}}</div>
+            <div ><span>Total : </span>{{Total}}</div>
+        <div style="margin-top:80px"></div>
+            
         </div>
+        
     </div>
-  </div>
-  
+<footer class="w-100 text-right px-5 actionFooter"
+  style="position: fixed; bottom: 0; right: 0; width:100% !important; margin-bottom: 3px; z-index: 1;">
+  <button type="button" [routerLink]="['/forecast']" class="btnfooterEnabled"
+     style="margin-top: 11px; color: #32588D; background-color: white; color: #0A6FB5; width: auto;
+    padding: 0px 15px; ">
+    Cancel
+  </button>
+  <button type="button" class="btnfooterEnabled" style="margin-top: 11px; width: auto; 
+    padding: 0px 15px;  background-color: #32588D" (click)="onSubmit()">
+    Finalize
+  </button>
+</footer>
+<!-- 
+<div mat-dialog-content>
+        <p>What's your favorite animal?</p>
+    </div>
+    <div mat-dialog-actions>
+        <button mat-button (click)="onNoClick()">No Thanks</button>
+        <button mat-button [mat-dialog-close]="data.animal" cdkFocusInitial>Ok</button>
+<div> -->

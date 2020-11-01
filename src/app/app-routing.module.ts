@@ -9,7 +9,9 @@ const routes: Routes = [
   { path: '', redirectTo: 'signin', pathMatch: 'full' },
     { path: 'signin', component: LoginPageComponent },
     { path: 'dashboard', component: DashboardPageComponent  },
-    { path: 'details-ocr', component:DetailsOcrPageComponent  }
+    { path: 'details-ocr', component:DetailsOcrPageComponent  },
+    { path: 'details-ocr/:id', component: DetailsOcrPageComponent },
+
 ];
 
 @NgModule({

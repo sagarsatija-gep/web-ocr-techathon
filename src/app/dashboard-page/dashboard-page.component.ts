@@ -1,132 +1,295 @@
-import { Component, OnInit } from '@angular/core';
-import {MatTableModule} from '@angular/material/table';
-import { MatTable } from '@angular/material/table';
-import { MatTableDataSource } from '@angular/material/table';
-// import "../node_modules/ag-grid-community/dist/styles/ag-grid.css";
-// import "../node_modules/ag-grid-community/dist/styles/ag-theme-alpine-dark.css";
-// import "../node_modules/ag-grid-community/dist/styles/ag-theme-alpine.css";
-import { FileSelectDirective, FileUploader} from 'ng2-file-upload';
+import { HttpClient, HttpErrorResponse, HttpEventType } from '@angular/common/http';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
+import { FileItem, FileSelectDirective, FileUploader} from 'ng2-file-upload';
+import { Observable } from 'rxjs';
+import { DashboardPageService } from './dashboard-page.service';
+import { map } from 'rxjs/operators';
+import 'rxjs/Rx';
+import * as moment from 'moment';
+import { of } from 'rxjs';  
+import { catchError } from 'rxjs/operators'; 
+import { RestApiService } from '../shared/rest-api.service';
 
-const uri = 'http://localhost:4200/file/upload';
+const uri = 'http://localhost:5000/api/upload-documents';
 @Component({
   selector: 'app-dashboard-page',
   templateUrl: './dashboard-page.component.html',
   styleUrls: ['./dashboard-page.component.css']
 })
+// var uo: FileUploaderOptions = {};
+// uo.headers = [{ name: 'x-ms-blob-type', value : 'BlockBlob' } ]
+export class DashboardPageComponent implements OnInit{
+  userId:any;
+  public uploader:FileUploader = new FileUploader({url:uri,
+    headers: [{
+      name:'Content-Type',
+      value: 'multipart/form-data'
+    }],
+    itemAlias: 'file',
+    allowedMimeType:[
+      "image/jpeg", "image/png", "application/pdf"
+    ]});
 
-export class DashboardPageComponent {
-  uploader:FileUploader = new FileUploader({url:uri});
+    // attachmentList:any = [];
+    // userId;
+    // userName;
 
-    attachmentList:any = [];
-
-    constructor(){
-
-        this.uploader.onCompleteItem = (item:any, response:any , status:any, headers:any) => {
-            this.attachmentList.push(JSON.parse(response));
-        }
+   //file;
+  //  @ViewChild("fileUpload", {static: false}) fileUpload: ElementRef;files  = [];  
+    constructor(private route: Router,
+      private _dashboardService:DashboardPageService,
+      private service:RestApiService,
+      private http : HttpClient){
+        
     }
+    //userId=this.service.getUserType()
+  ngOnInit(): void {
+    this.userId=this.service.getUserType()
+    this.uploader.uploadAll();
+        this.uploader.onAfterAddingFile = (fileItem: FileItem) => {  if (!fileItem.file.type)  fileItem.file.type = 'multipart/form-data'; };
+    this.uploader.onCompleteItem = (item: any, response: any, status: any, headers: any) => {
+         console.log('FileUpload:uploaded successfully:', item, status, response,headers);
+         //alert('Your file has been uploaded successfully');
+    };
+ 
+    // this.uploader.uploadAll();
+    //     this.uploader.onAfterAddingFile = (file) => { file.formData =file._file; };
+    // this.uploader.onCompleteItem = (item: any, response: any, status: any, headers: any) => {
+    //      console.log('FileUpload:uploaded successfully:', item, status, response);
+    //      //alert('Your file has been uploaded successfully');
+    // };
+    this._dashboardService.getOcrAll().subscribe(res=>{
+
+      this.rowDataAll=res;
+      for(let i=0;i<res.length;i++){
+      if(res[i].uploadedBy=='5f9c4151c6f8e54c3bfd51a6'){
+        this.rowDataAll[i].uploadedBy="John Smith";
+      }}
+      //console.log(this.rowDataAll)
+      // for(let i=11;i<res.length;i++){
+      //   if(res[i].documentDetail.invoiceNo!=''){
+      //     this.rowDataAll[i].documentDetail.invoiceNo=res[i].documentDetail.invoiceNo;
+      //   }}
+      console.log(res);
+      
+    });
+    this._dashboardService.getOcrProcessed(4).subscribe(res=>{
+      this.rowDataProcessed=res;
+      for(let i=0;i<res.length;i++){
+        if(res[i].uploadedBy=='5f9c4151c6f8e54c3bfd51a6'){
+          this.rowDataProcessed[i].uploadedBy="John Smith";
+        }}
+      //console.log(res);
+    });
+    this._dashboardService.getOcrUnProcessed(3).subscribe(res=>{
+      this.rowDataUnProcessed=res;
+      for(let i=0;i<res.length;i++){
+        if(res[i].uploadedBy=='5f9c4151c6f8e54c3bfd51a6'){
+          this.rowDataUnProcessed[i].uploadedBy="John Smith";
+        }}
+      //console.log(res);
+    });
+    this._dashboardService.getOcrFinalized(5).subscribe(res=>{
+      this.rowDataFinal=res;
+      for(let i=0;i<res.length;i++){
+        if(res[i].uploadedBy=='5f9c4151c6f8e54c3bfd51a6'){
+          this.rowDataFinal[i].uploadedBy="John Smith";
+        }}
+      //console.log(res);
+    });
+    this._dashboardService.getOcrInprogress(2).subscribe(res=>{
+      this.rowDataInprogress=res;
+      for(let i=0;i<res.length;i++){
+        if(res[i].uploadedBy=='5f9c4151c6f8e54c3bfd51a6'){
+          this.rowDataInprogress[i].uploadedBy="John Smith";
+        }}
+      //console.log(res);
+    });
+    
+  }
+//   uploadFile(file) {  
+//     const formData = new FormData();  
+//     formData.append('file', file.data);  
+//     file.inProgress = true;  
+//     this._dashboardService.upload(file.data).pipe(  
+//       map(event => {  
+//         switch (event.type) {  
+//           case HttpEventType.UploadProgress:  
+//             file.progress = Math.round(event.loaded * 100 / event.total);  
+//             break;  
+//           case HttpEventType.Response:  
+//             return event;  
+//         }  
+//       }),  
+//       catchError((error: HttpErrorResponse) => {  
+//         file.inProgress = false;  
+//         return of(`${file.data.name} upload failed.`);  
+//       })).subscribe((event: any) => {  
+//         if (typeof (event) === 'object') {  
+//           console.log(event.body);  
+//         }  
+//       });  
+//   }
+//   private uploadFiles() {  
+//     this.fileUpload.nativeElement.value = '';  
+//     this.files.forEach(file => {  
+//       this.uploadFile(file);  
+//     });  
+// }
+// onClick() {  
+//   const fileUpload = this.fileUpload.nativeElement;fileUpload.onchange = () => {  
+//   for (let index = 0; index < fileUpload.files.length; index++)  
+//   {  
+//    const file = fileUpload.files[index];  
+//    this.files.push({ data: file, inProgress: false, progress: 0});  
+//   }  
+//     this.uploadFiles();  
+//   };  
+//   fileUpload.click();  
+// }
   
-  selectedFile: File
-
-  onFileChanged(event) {
-    this.selectedFile = event.target.files[0]
-  }
-
-  onUpload() {
-    // upload code goes here
-  }
+  onRowClicked(event: any) 
+  { 
+    let id=event.data.invoiceDocumentId;
+    this.route.navigate([`/details-ocr/${id}`])
+    console.log(id);
+    console.log('row', event); 
+   }
 
   columnDefsAll = [
-    { headerName:'invoiceNo',
-      field: 'invoiceNo' },
-
-    { field: 'userName' },
-    { field: 'status'}
+    { headerName:'FileName',
+      field: 'fileName' ,
+      rowSelection:'single',
+      width:300,
+      resizable:true,
+      headerTooltip:'FileName',
+      enableTooltip : true,
+      cellRenderer: (invNum) => 
+              `<a href="/details-ocr/${invNum.data.invoiceDocumentId}" >${invNum.value}</a>` 
+      
+  },
+  { headerName:'InvoiceNo',
+      field: 'documentDetail.invoiceNo',
+    width:300 },
+ 
+    { headerName:'UploadedBy',
+      field: 'uploadedBy',
+    width:300 },
+    { headerName:'UploadedDate',
+      field: 'uploadedDate',
+      width:300,
+      valueFormatter: function (params){
+       return moment (params.value).format ('MM/DD/YYYY HH:mm');
+      }}
+      //invoiceDocumentId
 ];
-
-rowDataAll = [
-    { invoiceNo:1 , userName: 'Celica', status: 'processed' },
-    { invoiceNo: 2, userName: 'Mondeo', status: 'unprocessed' },
-    { invoiceNo: 3, userName: 'Boxter', status: 'processed' }
+rowDataAll:any;
+columnDefsInprogress = [
+  { headerName:'FileName',
+    field: 'fileName' ,
+    rowSelection:'single',
+    width:300,
+    resizable:true,
+      headerTooltip:'FileName',
+      enableTooltip : true,
+      cellRenderer: (invNum) => 
+              `<a href="/details-ocr/${invNum.data.invoiceDocumentId}" >${invNum.value}</a>` 
+},
+{ headerName:'InvoiceNo',
+      field: 'documentDetail.invoiceNo',
+    width:300 },
+  { headerName:'UploadedBy',
+    field: 'uploadedBy',
+    width:300 },
+  { headerName:'UploadedDate',
+    field: 'uploadedDate',
+    width:300,
+    valueFormatter: function (params){
+      return moment (params.value).format ('MM/DD/YYYY HH:mm');
+     }}//invoiceDocumentId
 ];
-//Invoicedate CustomerNo  CustomerName  Customer Address  ShipTo  ShipVia InvoiceSubTotal InvoiceTAX  INvoiceDiscount InvoiceTotal
+rowDataInprogress:any;
+columnDefsFinal = [
+  { headerName:'FileName',
+    field: 'fileName' ,
+    rowSelection:'single',
+    width:300,
+    resizable:true,
+      headerTooltip:'FileName',
+      enableTooltip : true,
+      cellRenderer: (invNum) => 
+              `<a href="/details-ocr/${invNum.data.invoiceDocumentId}" >${invNum.value}</a>` 
+},
+{ headerName:'InvoiceNo',
+      field: 'documentDetail.invoiceNo',
+    width:300 },
+  { headerName:'UploadedBy',
+    field: 'uploadedBy' ,
+    width:300},
+  { headerName:'UploadedDate',
+    field: 'uploadedDate',
+    width:300,
+    valueFormatter: function (params){
+      return moment (params.value).format ('MM/DD/YYYY HH:mm');
+     }}//invoiceDocumentId
+];
+rowDataFinal:any;
 columnDefsProcessed = [
-  { field: 'invoiceNo' },
-  { field: 'userName' },
-  { field: 'status'},
-  { field: 'invoiceDate' },
-  { field: 'customerNo' },
-  { field: 'customerName' },
-  { field: 'customerAddress' },
-  { field: 'shipTo' },
-  { field: 'shipVia' },
-  { field: 'invoiceSubTotal' },
-  { field: 'invoiceTAX' },
-  { field: 'iNvoiceDiscount' },
-  { field: 'invoiceTotal' },
-  
+  { headerName:'FileName',
+  field: 'fileName' ,
+  rowSelection:'single',
+  width:300,
+  resizable:true,
+      headerTooltip:'FileName',
+      enableTooltip : true,
+      cellRenderer: (invNum) => 
+              `<a href="/details-ocr/${invNum.data.invoiceDocumentId}" >${invNum.value}</a>` 
+},
+{ headerName:'InvoiceNo',
+      field: 'documentDetail.invoiceNo',
+    width:300 },
+{ headerName:'UploadedBy',
+  field: 'uploadedBy' ,
+  width:300},
+{ headerName:'UploadedDate',
+  field: 'uploadedDate',
+  width:300,
+  valueFormatter: function (params){
+    return moment (params.value).format ('MM/DD/YYYY HH:mm');
+   }}
 ];
 
-rowDataProcessed = [
-  { invoiceNo:1 , userName: 'Celica', status: 'processed' },
-  { invoiceNo: 2, userName: 'Mondeo', status: 'unprocessed' },
-  { invoiceNo: 3, userName: 'Boxter', status: 'processed' }
-];
+rowDataProcessed :any;
 columnDefsUnProcessed = [
-  { field: 'invoiceNo' },
-  { field: 'userName' },
-  { field: 'status'},
-  { field: 'invoiceDate' },
-  { field: 'customerNo' },
-  { field: 'customerName' },
-  { field: 'customerAddress' },
-  { field: 'shipTo' },
-  { field: 'shipVia' },
-  { field: 'invoiceSubTotal' },
-  { field: 'invoiceTAX' },
-  { field: 'iNvoiceDiscount' },
-  { field: 'invoiceTotal' },
+  { headerName:'FileName',
+      field: 'fileName' ,
+      rowSelection:'single',
+      width:300,
+      resizable:true,
+      headerTooltip:'FileName',
+      enableTooltip : true,
+      cellRenderer: (invNum) => 
+              `<a href="/details-ocr/${invNum.data.invoiceDocumentId}" >${invNum.value}</a>` 
+  },
+  { headerName:'InvoiceNo',
+  field: 'documentDetail.invoiceNo',
+width:300 },
+    { headerName:'UploadedBy',
+      field: 'uploadedBy' ,
+      width:300},
+    { headerName:'UploadedDate',
+      field: 'uploadedDate',
+      width:300,
+      valueFormatter: function (params){
+        return moment (params.value).format ('MM/DD/YYYY HH:mm');
+       }}
   
 ];
-
-rowDataUnProcessed = [
-  { invoiceNo:1 , userName: 'Celica', status: 'processed' },
-  { invoiceNo: 2, userName: 'Mondeo', status: 'unprocessed' },
-  { invoiceNo: 3, userName: 'Boxter', status: 'processed' }
-];
+onSelectionChanged(event){
+  console.log(event)
 }
 
-// displayedColumns = ['position', 'firstName', 'lastName', 'email'];
-//   // dataSource = new MatTableDataSource(ELEMENT_DATA);
-//   invoiceCol=['invoiceNo','userName','status'];
-//   dataSource = new MatTableDataSource(InvoiceDetails);
-
-// export interface Element {
-//   position: number;
-//   firstName: string;
-//   lastName: string;
-//   email: string;
-// }
-// export interface Details {
-//   invoiceNo: number;
-//   userName: string;
-//   status: string;
-// }
-
-// const ELEMENT_DATA: Element[] = [
-//   {position: 1, firstName: 'John', lastName: 'Doe', email: 'john@gmail.com'},
-//   {position: 1, firstName: 'Mike', lastName: 'Hussey', email: 'mike@gmail.com'},
-//   {position: 1, firstName: 'Ricky', lastName: 'Hans', email: 'ricky@gmail.com'},
-//   {position: 1, firstName: 'Martin', lastName: 'Kos', email: 'martin@gmail.com'},
-//   {position: 1, firstName: 'Tom', lastName: 'Paisa', email: 'tom@gmail.com'}
-// ];
-// const InvoiceDetails: Details[] = [
-//   {invoiceNo: 1, userName: 'John', status: 'processed'},
-//   {invoiceNo: 2, userName: 'Mike', status: 'processed'},
-//   {invoiceNo: 3, userName: 'Ricky', status: 'unprocessed'},
-//   {invoiceNo: 4, userName: 'Martin', status: 'unprocessed'},
-//   {invoiceNo: 5, userName: 'Tom', status: 'processed'}
-// ];
-
-
+rowDataUnProcessed :any;
+}
 

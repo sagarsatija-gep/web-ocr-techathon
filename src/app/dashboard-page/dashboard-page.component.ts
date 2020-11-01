@@ -80,7 +80,7 @@ export class DashboardPageComponent implements OnInit{
         if(res[i].uploadedBy=='5f9c4151c6f8e54c3bfd51a6'){
           this.rowDataProcessed[i].uploadedBy="John Smith";
         }}
-      //console.log(res);
+      console.log(res);
     });
     this._dashboardService.getOcrUnProcessed(3).subscribe(res=>{
       this.rowDataUnProcessed=res;

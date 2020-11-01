@@ -145,22 +145,44 @@ redirectTo(uri:string){
 }
 @Component({
   selector: 'ngbd-modal-content',
-  template: `
-    <div class="modal-header" style= "display:flex;
-    position: fixed;
-    left: 400px;
-    top: 200px;" >
+  template: `<div class="modal-content" style ="position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  pointer-events: auto;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid rgba(0,0,0,.2);
+  border-radius: .3rem;
+  outline: 0;">
+  <div class="modal-header" style= "display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 1rem;
+  border-bottom: 1px solid #dee2e6;
+  border-top-left-radius: calc(.3rem - 1px);
+  border-top-right-radius: calc(.3rem - 1px);" >
       <h4 class="modal-title">Hi there!</h4>
       <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
         <span aria-hidden="true">&times;</span>
       </button>
     </div>
-    <div class="modal-body">
+    <div class="modal-body" style="position: relative;
+    flex: 1 1 auto;
+    padding: 1rem;">
       <p>Hello, {{name}}!</p>
     </div>
-    <div class="modal-footer">
+    <div class="modal-footer" style="display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+    padding: .75rem;
+    border-top: 1px solid #dee2e6;
+    border-bottom-right-radius: calc(.3rem - 1px);
+    border-bottom-left-radius: calc(.3rem - 1px);">
       <button type="button" class="btn btn-outline-dark" (click)="activeModal.close('Close click')">Close</button>
-    </div>
+    </div></div>
+    
   `
 })
 export class NgbdModalContent {
